@@ -1,4 +1,4 @@
-import 'package:wanandroid/pages/my_system/system_data_entity.dart';
+import 'file:///E:/wanAndroidFlutter/lib/data/entitys/system_data_entity.dart';
 
 systemDataEntityFromJson(SystemDataEntity data, Map<String, dynamic> json) {
 	if (json['data'] != null) {

@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:wanandroid/pages/my_system/system_data_entity.dart';
+import 'file:///E:/wanAndroidFlutter/lib/data/entitys/system_data_entity.dart';
 
 import 'net.dart';
 
@@ -33,8 +33,13 @@ class _SystemsPageState extends State<SystemsPage> {
   void initState() {
     super.initState();
 
-    getSystemList().then((value) =>
-        entityList.addAll(value.data)
+    getSystemList().then((value) =>{
+      setState((){
+        entityList.addAll(value.data);
+      })
+
+    }
+
     );
 
   }

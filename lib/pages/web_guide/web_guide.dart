@@ -1,7 +1,8 @@
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:wanandroid/pages/my_system/net.dart';
-import 'package:wanandroid/pages/web_guide/web_guide_entity.dart';
+import 'file:///E:/wanAndroidFlutter/lib/data/entitys/web_guide_entity.dart';
 
 void main() => runApp(WebGuideApp());
 
@@ -24,12 +25,22 @@ class WebGuidePage extends StatefulWidget {
 
 class _WebGuidePageState extends State<WebGuidePage> {
 
-  List<WebGuideData>  entityList = new List();
+  List<WebGuideData>  _entityList = new List();
+  List<WebGuideDataArticle> _articles = new List();
+  var _leftIndex = 0;
+
+
 
   @override
   void initState() {
     super.initState();
-    getWebGuideList().then((value) => entityList.addAll(value.data));
+    getWebGuideList().then((value) => {
+      setState(() {
+        _entityList.addAll(value.data);
+        _articles.addAll(_entityList[_leftIndex].articles);
+      })
+    });
+
   }
   @override
   Widget build(BuildContext context) {
@@ -39,30 +50,75 @@ class _WebGuidePageState extends State<WebGuidePage> {
         centerTitle: true,
       ),
       body: Row(
-
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          Expanded(
+            flex: 1,
             child: ListView.builder(
-                itemCount: entityList.length,
+                itemCount: _entityList.length,
                 itemBuilder: (context,index){
-                  return _buildItems(index);
+                  return _buildListItems(index);
                 }),
           ),
+          Expanded(
+              flex: 2,
+              child:GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,////横轴两个子widget
+                  childAspectRatio: 1.0////子widget 宽高比为1
+                ),
+                itemCount: _articles.length,
+                itemBuilder: (context,index){
+                  return _buildGridItems(index);
+              })
+          )
 
-//          GridView.builder(
-//              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//                crossAxisCount: 2,////横轴两个子widget
-//                childAspectRatio: 1.0////子widget 宽高比为1
-//              ),
-//              itemBuilder: null)
         ],
       ),
     );
   }
 
-  _buildItems(int index) {
-    return Container(
-      child: Text(entityList[index].name),
+  _buildListItems(int index) {
+
+    return GestureDetector(
+      onTap: (){
+        setState(() {
+          _leftIndex = index;
+          _articles = _entityList[_leftIndex].articles;
+        });
+
+      },
+      child:Container(
+        height: 48,
+        color: _leftIndex == index ? Colors.white : Color(0xFFE0E0E0),
+        child: Center(
+          child: Text(_entityList[index].name,style: TextStyle(fontSize: 16),),
+        ),
+      ) ,
     );
+
+  }
+
+  _buildGridItems(int index){
+    List<Color> colors = _randomColor();//构建随机色
+    return Container(
+      margin: const EdgeInsets.all(4),
+      color: colors[0],
+      child: Center(
+        child: Text(_articles[index].title,style: TextStyle(fontSize: 16,color: colors[1]),textAlign: TextAlign.center,),
+      ),
+    );
+  }
+
+  List<Color> _randomColor() {
+    int R = Random().nextInt(256)+0;
+    int G = Random().nextInt(256)+0;
+    int B = Random().nextInt(256)+0;
+    Color bgColor = Color.fromARGB(255,R ,G,B );
+    Color txColor = Color.fromARGB(255, 256-R, 256-G, 256-B);
+    List<Color> colors = new List();
+    colors.add(bgColor);
+    colors.add(txColor);
+    return colors;
   }
 }

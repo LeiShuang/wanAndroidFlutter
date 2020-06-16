@@ -1,4 +1,4 @@
-import 'package:wanandroid/pages/web_guide/web_guide_entity.dart';
+import 'file:///E:/wanAndroidFlutter/lib/data/entitys/web_guide_entity.dart';
 
 webGuideEntityFromJson(WebGuideEntity data, Map<String, dynamic> json) {
 	if (json['data'] != null) {
