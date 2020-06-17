@@ -1,3 +1,4 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
@@ -6,15 +7,27 @@ import 'package:wanandroid/pages/home/home_view.dart';
 import 'package:wanandroid/pages/home/index_home.dart';
 import 'package:wanandroid/pages/home/index_profile.dart';
 import 'package:wanandroid/pages/home/index_sort.dart';
+import 'package:wanandroid/pages/web_guide/web_guide.dart';
+import 'package:wanandroid/routers/application.dart';
+import 'package:wanandroid/routers/routers.dart';
 import 'package:wanandroid/utils/theme_utils.dart';
+
+import 'my_system/system_data.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
+  MyApp(){
+    //初始化路由
+    final Router router = Router();
+    Routes.configureRoutes(router);
+    Application.router = router;
+  }
   @override
   State<StatefulWidget> createState() {
     return _MyAppState();
   }
+
 }
 
 class _MyAppState extends State<MyApp> {
@@ -73,13 +86,13 @@ class _MyAppState extends State<MyApp> {
             platform: TargetPlatform.iOS
         ),
         title: '玩安卓',
-        routes: {
-          '/HomePage': (context) => HomePage(),
-          '/ProjectPage': (context) => ProfilePage(),
-          '/SortPage': (context) => KnowledgeSortPage(),
-          '/ProfilePage': (context) => ProfilePage(),
-
-        },
+//        routes: {
+//          '/HomePage': (context) => HomePage(),
+//          '/ProjectPage': (context) => ProfilePage(),
+//          '/SortPage': (context) => SystemsPage(),
+//          '/ProfilePage': (context) => WebGuidePage(),
+//
+//        },
         home: HomeView(),
       ),
     );

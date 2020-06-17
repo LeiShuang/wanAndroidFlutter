@@ -1,31 +1,36 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:wanandroid/helper/toast_helper.dart';
+import 'package:wanandroid/routers/fluro_navigator.dart';
 import 'file:///E:/wanAndroidFlutter/lib/data/entitys/system_data_entity.dart';
 
 import 'net.dart';
 
-void main() => runApp(MySystemsApp());
-
-class MySystemsApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "体系",
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: SystemsPage(),
-    );
-  }
-}
+//void main() => runApp(MySystemsApp());
+//
+//class MySystemsApp extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      title: "体系",
+//      theme: ThemeData(
+//        primarySwatch: Colors.blue,
+//      ),
+//      home: SystemsPage(),
+//    );
+//  }
+//}
 
 class SystemsPage extends StatefulWidget {
   @override
   _SystemsPageState createState() => _SystemsPageState();
 }
 
-class _SystemsPageState extends State<SystemsPage> {
+class _SystemsPageState extends State<SystemsPage> with AutomaticKeepAliveClientMixin<SystemsPage>, SingleTickerProviderStateMixin{
+
+  @override
+  bool get wantKeepAlive => true;
 
   List<SystemDataData> entityList = new List();
 
@@ -45,11 +50,12 @@ class _SystemsPageState extends State<SystemsPage> {
   }
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("体系"),
-        centerTitle: true,
-      ),
+//      appBar: AppBar(
+//        title: Text("体系"),
+//        centerTitle: true,
+//      ),
       body: Container(
         child: ListView.builder(
           itemCount: entityList.length,
@@ -95,12 +101,22 @@ class _SystemsPageState extends State<SystemsPage> {
   _buildChildLabel(int index){
     if(entityList.length > 0){
       List<SystemDataDatachild> children = entityList[index].children;
-      List<Chip> chips = new List();
-      for (var child in children) {
+      List<Widget> chips = new List();
+      
+      for(int i = 0;i < children.length;i++){
+        SystemDataDatachild child = children[i];
         List<Color> colors = _randomColor();//构建随机色
-        Chip chip = new Chip(label: Text(child.name,style: TextStyle(color: colors[1]),),backgroundColor: colors[0],);
-        chips.add(chip);
+        Widget widget = GestureDetector(
+          child: Chip(label: Text(child.name,style: TextStyle(color: colors[1]),),backgroundColor: colors[0],),
+          onTap: (){
+            ToastHelper.showToast("点击");
+//            NavigatorUtils.goWebViewPage(context, title, url)
+          },
+        );
+        
+        chips.add(widget);
       }
+     
       return chips;
     }else{
       return null;

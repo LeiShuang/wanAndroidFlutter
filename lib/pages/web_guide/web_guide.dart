@@ -1,21 +1,26 @@
 import 'dart:math';
 
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:wanandroid/pages/my_system/net.dart';
+import 'package:wanandroid/routers/application.dart';
 import 'file:///E:/wanAndroidFlutter/lib/data/entitys/web_guide_entity.dart';
+import 'package:wanandroid/routers/fluro_navigator.dart';
+import 'package:wanandroid/routers/routers.dart';
 
-void main() => runApp(WebGuideApp());
-
-class WebGuideApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "网站导航",
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: WebGuidePage(),
-    );
-  }
-}
+//void main() => runApp(WebGuideApp());
+//
+//class WebGuideApp extends StatelessWidget {
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      title: "网站导航",
+//      theme: ThemeData(primarySwatch: Colors.blue),
+//      home: WebGuidePage(),
+//    );
+//  }
+//}
 
 
 class WebGuidePage extends StatefulWidget {
@@ -23,12 +28,14 @@ class WebGuidePage extends StatefulWidget {
   _WebGuidePageState createState() => _WebGuidePageState();
 }
 
-class _WebGuidePageState extends State<WebGuidePage> {
+class _WebGuidePageState extends State<WebGuidePage> with AutomaticKeepAliveClientMixin<WebGuidePage>, SingleTickerProviderStateMixin{
+
+  @override
+  bool get wantKeepAlive => true;
 
   List<WebGuideData>  _entityList = new List();
   List<WebGuideDataArticle> _articles = new List();
   var _leftIndex = 0;
-
 
 
   @override
@@ -44,11 +51,12 @@ class _WebGuidePageState extends State<WebGuidePage> {
   }
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("网站导航"),
-        centerTitle: true,
-      ),
+//      appBar: AppBar(
+//        title: Text("网站导航"),
+//        centerTitle: true,
+//      ),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -104,8 +112,16 @@ class _WebGuidePageState extends State<WebGuidePage> {
     return Container(
       margin: const EdgeInsets.all(4),
       color: colors[0],
-      child: Center(
-        child: Text(_articles[index].title,style: TextStyle(fontSize: 16,color: colors[1]),textAlign: TextAlign.center,),
+      child: GestureDetector(
+        onTap: (){
+          WebGuideDataArticle article = _entityList[_leftIndex].articles[index];
+          String linkUrl = article.link;
+          String title = article.title;
+          NavigatorUtils.goWebViewPage(context, title, linkUrl);
+        },
+        child: Center(
+          child: Text(_articles[index].title,style: TextStyle(fontSize: 16,color: colors[1]),textAlign: TextAlign.center,),
+      ),
       ),
     );
   }
