@@ -31,18 +31,18 @@ class DioHelper {
   }
 
   //GET请求
-  get(String url, FormData params, Function successCallBack,
+  get(String url,  Map<String, dynamic> params, Function successCallBack,
       Function errorCallBack) async {
     _request(url, successCallBack, 'get', params, errorCallBack);
   }
 
-  post(String url, params, Function successCallBack,
+  post(String url, Map<String, dynamic> params, Function successCallBack,
       Function errorCallBack) async {
     _request(url, successCallBack, 'post', params, errorCallBack);
   }
 
   _request(String url, Function successCallBack,
-      [String method, FormData params, Function errorCallBack]) async {
+      [String method,  Map<String, dynamic> params, Function errorCallBack]) async {
     Response response;
     try {
       if (method == 'get') {

@@ -1,9 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:wanandroid/data/entitys/system_data_entity.dart';
 import 'package:wanandroid/helper/toast_helper.dart';
+import 'package:wanandroid/pages/my_system/system_router.dart';
 import 'package:wanandroid/routers/fluro_navigator.dart';
-import 'file:///E:/wanAndroidFlutter/lib/data/entitys/system_data_entity.dart';
 
 import 'net.dart';
 
@@ -109,8 +110,8 @@ class _SystemsPageState extends State<SystemsPage> with AutomaticKeepAliveClient
         Widget widget = GestureDetector(
           child: Chip(label: Text(child.name,style: TextStyle(color: colors[1]),),backgroundColor: colors[0],),
           onTap: (){
-            ToastHelper.showToast("点击");
-//            NavigatorUtils.goWebViewPage(context, title, url)
+            ToastHelper.showToast("点击了"+child.name);
+            NavigatorUtils.push(context, '${SystemRouter.systemList}?knowledgeId=${child.id}&title=${Uri.encodeComponent(child.name)}');
           },
         );
         

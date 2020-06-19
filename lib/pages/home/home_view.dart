@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wanandroid/pages/home/idnex_project.dart';
 import 'package:wanandroid/pages/home/index_home.dart';
-import 'package:wanandroid/pages/home/index_profile.dart';
-import 'package:wanandroid/pages/home/index_sort.dart';
-import 'package:wanandroid/pages/my_system/system_data.dart';
+import 'package:wanandroid/pages/my_system/knowledge_system.dart';
 import 'package:wanandroid/pages/web_guide/web_guide.dart';
 
 class HomeView extends StatefulWidget {

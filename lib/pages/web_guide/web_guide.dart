@@ -1,12 +1,9 @@
 import 'dart:math';
 
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:wanandroid/data/entitys/web_guide_entity.dart';
 import 'package:wanandroid/pages/my_system/net.dart';
-import 'package:wanandroid/routers/application.dart';
-import 'file:///E:/wanAndroidFlutter/lib/data/entitys/web_guide_entity.dart';
 import 'package:wanandroid/routers/fluro_navigator.dart';
-import 'package:wanandroid/routers/routers.dart';
 
 //void main() => runApp(WebGuideApp());
 //

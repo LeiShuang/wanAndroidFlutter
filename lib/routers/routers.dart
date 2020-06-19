@@ -2,6 +2,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:wanandroid/pages/main.dart';
+import 'package:wanandroid/pages/my_system/system_router.dart';
 import 'package:wanandroid/pages/web_detail/web_detail.dart';
 import 'package:wanandroid/routers/router_init.dart';
 
@@ -34,7 +35,7 @@ class Routes {
     
     _listRouter.clear();
     /// 各自路由由各自模块管理，统一在此添加初始化
-//    _listRouter.add(ShopRouter());
+    _listRouter.add(SystemRouter());
 //    _listRouter.add(LoginRouter());
 //    _listRouter.add(GoodsRouter());
 //    _listRouter.add(OrderRouter());

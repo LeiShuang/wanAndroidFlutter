@@ -12,7 +12,7 @@ import 'package:wanandroid/routers/application.dart';
 import 'package:wanandroid/routers/routers.dart';
 import 'package:wanandroid/utils/theme_utils.dart';
 
-import 'my_system/system_data.dart';
+import 'my_system/knowledge_system.dart';
 
 void main() => runApp(MyApp());
 

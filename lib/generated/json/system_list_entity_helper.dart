@@ -1,11 +1,8 @@
-import 'package:wanandroid/data/entitys/web_guide_entity.dart';
+import 'package:wanandroid/data/entitys/system_list_entity.dart';
 
-webGuideEntityFromJson(WebGuideEntity data, Map<String, dynamic> json) {
+systemListEntityFromJson(SystemListEntity data, Map<String, dynamic> json) {
 	if (json['data'] != null) {
-		data.data = new List<WebGuideData>();
-		(json['data'] as List).forEach((v) {
-			data.data.add(new WebGuideData().fromJson(v));
-		});
+		data.data = new SystemListData().fromJson(json['data']);
 	}
 	if (json['errorCode'] != null) {
 		data.errorCode = json['errorCode']?.toInt();
@@ -16,43 +13,59 @@ webGuideEntityFromJson(WebGuideEntity data, Map<String, dynamic> json) {
 	return data;
 }
 
-Map<String, dynamic> webGuideEntityToJson(WebGuideEntity entity) {
+Map<String, dynamic> systemListEntityToJson(SystemListEntity entity) {
 	final Map<String, dynamic> data = new Map<String, dynamic>();
 	if (entity.data != null) {
-		data['data'] =  entity.data.map((v) => v.toJson()).toList();
+		data['data'] = entity.data.toJson();
 	}
 	data['errorCode'] = entity.errorCode;
 	data['errorMsg'] = entity.errorMsg;
 	return data;
 }
 
-webGuideDataFromJson(WebGuideData data, Map<String, dynamic> json) {
-	if (json['articles'] != null) {
-		data.articles = new List<WebGuideDataArticle>();
-		(json['articles'] as List).forEach((v) {
-			data.articles.add(new WebGuideDataArticle().fromJson(v));
+systemListDataFromJson(SystemListData data, Map<String, dynamic> json) {
+	if (json['curPage'] != null) {
+		data.curPage = json['curPage']?.toInt();
+	}
+	if (json['datas'] != null) {
+		data.datas = new List<SystemListDataData>();
+		(json['datas'] as List).forEach((v) {
+			data.datas.add(new SystemListDataData().fromJson(v));
 		});
 	}
-	if (json['cid'] != null) {
-		data.cid = json['cid']?.toInt();
+	if (json['offset'] != null) {
+		data.offset = json['offset']?.toInt();
 	}
-	if (json['name'] != null) {
-		data.name = json['name']?.toString();
+	if (json['over'] != null) {
+		data.over = json['over'];
+	}
+	if (json['pageCount'] != null) {
+		data.pageCount = json['pageCount']?.toInt();
+	}
+	if (json['size'] != null) {
+		data.size = json['size']?.toInt();
+	}
+	if (json['total'] != null) {
+		data.total = json['total']?.toInt();
 	}
 	return data;
 }
 
-Map<String, dynamic> webGuideDataToJson(WebGuideData entity) {
+Map<String, dynamic> systemListDataToJson(SystemListData entity) {
 	final Map<String, dynamic> data = new Map<String, dynamic>();
-	if (entity.articles != null) {
-		data['articles'] =  entity.articles.map((v) => v.toJson()).toList();
+	data['curPage'] = entity.curPage;
+	if (entity.datas != null) {
+		data['datas'] =  entity.datas.map((v) => v.toJson()).toList();
 	}
-	data['cid'] = entity.cid;
-	data['name'] = entity.name;
+	data['offset'] = entity.offset;
+	data['over'] = entity.over;
+	data['pageCount'] = entity.pageCount;
+	data['size'] = entity.size;
+	data['total'] = entity.total;
 	return data;
 }
 
-webGuideDataArticleFromJson(WebGuideDataArticle data, Map<String, dynamic> json) {
+systemListDataDataFromJson(SystemListDataData data, Map<String, dynamic> json) {
 	if (json['apkLink'] != null) {
 		data.apkLink = json['apkLink']?.toString();
 	}
@@ -153,7 +166,7 @@ webGuideDataArticleFromJson(WebGuideDataArticle data, Map<String, dynamic> json)
 	return data;
 }
 
-Map<String, dynamic> webGuideDataArticleToJson(WebGuideDataArticle entity) {
+Map<String, dynamic> systemListDataDataToJson(SystemListDataData entity) {
 	final Map<String, dynamic> data = new Map<String, dynamic>();
 	data['apkLink'] = entity.apkLink;
 	data['audit'] = entity.audit;
