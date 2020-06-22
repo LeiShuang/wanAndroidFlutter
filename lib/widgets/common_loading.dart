@@ -18,7 +18,7 @@ class CommonLoading extends StatelessWidget {
           SizedBox(
             width: 20.0,
           ),
-          Text('正在加载...'),
+          Text('数据加载中...'),
         ],
       )),
     );

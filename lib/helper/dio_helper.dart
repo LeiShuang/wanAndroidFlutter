@@ -32,18 +32,18 @@ class DioHelper {
   }
 
   //GET请求
-  get(String url, FormData params, Function successCallBack,
+  get(String url,  Map<String, dynamic> params, Function successCallBack,
       Function errorCallBack) async {
     _request(url, successCallBack, 'get', params, errorCallBack);
   }
 
-  post(String url, params, Function successCallBack,
+  post(String url, Map<String, dynamic> params, Function successCallBack,
       Function errorCallBack) async {
     _request(url, successCallBack, 'post', params, errorCallBack);
   }
 
   _request(String url, Function successCallBack,
-      [String method, FormData params, Function errorCallBack]) async {
+      [String method,  Map<String, dynamic> params, Function errorCallBack]) async {
     Response response;
     try {
       if (method == 'get') {
@@ -93,7 +93,6 @@ class DioHelper {
         print('返回参数: ' + response.data.toString());
       }
     }
-//    String dataStr = await json.decode(response.data.toString());
    if(response == null ){
      _error(errorCallBack, "数据获取为null");
    }else if (successCallBack != null){

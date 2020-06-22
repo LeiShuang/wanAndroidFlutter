@@ -190,6 +190,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.10.11"
+  fluro:
+    dependency: "direct main"
+    description:
+      name: fluro
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.5.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -564,4 +571,4 @@ packages:
     version: "2.2.1"
 sdks:
   dart: ">=2.4.0 <3.0.0"
-  flutter: ">=1.6.7 <2.0.0"
+  flutter: ">=1.6.7 <1.13.0"

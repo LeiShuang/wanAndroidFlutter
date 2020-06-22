@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wanandroid/data/entitys/home_article_entity_entity.dart';
 import 'package:wanandroid/helper/toast_helper.dart';
-
+import 'package:wanandroid/routers/fluro_navigator.dart';
 //首页ListView的Item布局
 class HomeArticleWidget extends StatelessWidget {
   const HomeArticleWidget({Key key, @required HomeArticleEntityDataData data})
@@ -15,60 +14,46 @@ class HomeArticleWidget extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () {
-          ToastHelper.showToast('点击了条目');
+          NavigatorUtils.goWebViewPage(context, _data.title.toString(), _data.link.toString());
         },
         child: Container(
-          padding: EdgeInsets.all(ScreenUtil().setHeight(10.0)),
-          child: Row(
+          padding: EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Expanded(
-
-                flex: 1,
-                child: IconButton(
-                    icon: Icon(Icons.favorite_border),
-                    onPressed: () {
-                      ToastHelper.showToast("点击了收藏");
-                    }),
-              ),
               Container(
-//                height: ScreenUtil().setHeight(50.0),
-                child: Column(
-//                  mainAxisAlignment: MainAxisAlignment.start,
-//                alignment: WrapAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      _data.title.toString(),
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        _itemOutLine(_data.superChapterName, _data.projectLink),
-                        _itemOutLine(_data.chapterName, _data.projectLink),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Icon(
-                          Icons.person,
-                          color: Colors.yellow,
-                          size: 12.0,
-                        ),
-                        Text(
-                          _data.author == "" ? _data.shareUser : _data.author,
-                          style:
-                              TextStyle(color: Colors.green[400], fontSize: 12),
-                        ),
-                        Text(
-                          '时间:${_data.niceDate}',
-                          style: TextStyle(color: Colors.black54, fontSize: 12),
-                        )
-                      ],
-                    )
-                  ],
+                child: Text(
+                  _data.title.toString(),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                  textAlign: TextAlign.left,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
+              ),
+              Row(
+                children: <Widget>[
+                  _itemOutLine(_data.superChapterName, _data.projectLink),
+                  _itemOutLine(_data.chapterName, _data.projectLink),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Icon(
+                    Icons.person,
+                    color: Colors.yellow,
+                    size: 12.0,
+                  ),
+                  Text(
+                    _data.author == "" ? _data.shareUser : _data.author,
+                    style: TextStyle(color: Colors.green[400], fontSize: 12),
+                  ),
+                  Flexible(child: Container()),
+                  Text(
+                    '时间:${_data.niceDate}',
+                    style: TextStyle(color: Colors.black54, fontSize: 12),
+                  )
+                ],
               )
             ],
           ),

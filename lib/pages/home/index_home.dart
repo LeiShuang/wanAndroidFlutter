@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:wanandroid/data/api/RequestString.dart';
+import 'package:wanandroid/data/api/requeststring.dart';
 import 'package:wanandroid/data/entitys/banner_entity_entity.dart';
 import 'package:wanandroid/data/entitys/home_article_entity_entity.dart';
 import 'package:wanandroid/generated/json/base/json_convert_content.dart';
@@ -21,7 +21,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<HomePage>{
   List<BannerEntityData> bannerLists = List();
   List<HomeArticleEntityDataData> articleLists = List();
   RefreshController _homeRefreshController =
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     ScreenUtil.init(context,
         width: 1080, height: 1920, allowFontScaling: false);
-    return Scaffold(
+    /* return Scaffold(
         appBar: AppBar(
           title: Text(
             StringUtils.home,
@@ -54,6 +54,11 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: Column(
+            children: bannerLists.length > 0 && articleLists.length > 0
+                ? _getContent()
+                : _showLoadingView()));*/
+    return Container(
+        child: Column(
             children: bannerLists.length > 0 && articleLists.length > 0
                 ? _getContent()
                 : _showLoadingView()));
@@ -115,7 +120,7 @@ class _HomePageState extends State<HomePage> {
       child: ListView.builder(
           itemCount: articleLists.length,
           itemBuilder: (BuildContext context, int index) {
-            return HomeArticleWidget(data:articleLists[index]);
+            return HomeArticleWidget(data: articleLists[index]);
           }),
       enablePullUp: true,
       onRefresh: _onRefresh,
@@ -134,4 +139,7 @@ class _HomePageState extends State<HomePage> {
     _getArticleListData();
     _homeRefreshController.loadComplete();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
