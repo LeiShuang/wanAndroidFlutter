@@ -40,9 +40,9 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+    /*  appBar: AppBar(
         title: Text('玩安卓'),
-      ),
+      ),*/
 //      backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,

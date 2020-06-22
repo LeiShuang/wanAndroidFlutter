@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
       headerTriggerDistance: 80.0,
       // 头部触发刷新的越界距离
       springDescription:
-      SpringDescription(stiffness: 170, damping: 16, mass: 1.9),
+          SpringDescription(stiffness: 170, damping: 16, mass: 1.9),
       // 自定义回弹动画,三个属性值意义请查询flutter api
       maxOverScrollExtent: 100,
       //头部最大可以拖动的范围,如果发生冲出视图范围区域,请设置这个属性
@@ -64,25 +64,22 @@ class _MyAppState extends State<MyApp> {
       enableBallisticLoad: true,
       // 可以通过惯性滑动触发加载更多
       child: MaterialApp(
-        debugShowCheckedModeBanner: false, //取消默认的debug显示
-        theme:
-        ThemeData(
-          //默认的theme颜色
+        debugShowCheckedModeBanner: false,
+        //取消默认的debug显示
+        theme: ThemeData(
+            //默认的theme颜色
             primaryColor: themeColor,
             //右划返回
-            platform: TargetPlatform.iOS
-        ),
+            platform: TargetPlatform.iOS),
         title: '玩安卓',
         routes: {
           '/HomePage': (context) => HomePage(),
           '/ProjectPage': (context) => ProfilePage(),
           '/SortPage': (context) => KnowledgeSortPage(),
           '/ProfilePage': (context) => ProfilePage(),
-
         },
         home: HomeView(),
       ),
     );
   }
 }
-

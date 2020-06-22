@@ -13,14 +13,15 @@ class DioHelper {
   //私有构造方法
   DioHelper._({String baseUrl}) {
     if (null == _dio) {
+      _dio = Dio();
       // 初始化
       _dio.options.baseUrl = baseUrl == null ? GlobalConfig.BASE_URL : baseUrl;
+      _dio.options.responseType = ResponseType.json;
       _dio.options.connectTimeout = 3000;
       _dio.options.receiveTimeout = 3000;
       _dio.interceptors.add(LogInterceptor(requestBody: GlobalConfig.isDebug));
     }
 
-//      dio.interceptors.add(CookieManager(CookieJar()));
   }
 
   static DioHelper _DioHelperInstance() {
@@ -89,15 +90,14 @@ class DioHelper {
         print('请求参数: ' + params.toString());
       }
       if (response != null) {
-        print('返回参数: ' + response.toString());
+        print('返回参数: ' + response.data.toString());
       }
     }
-    String dataStr = await json.decode(response.data);
-    Map<String,dynamic> dataMap = await json.decode(dataStr);
-   if(dataMap == null ){
-     _error(errorCallBack, '错误码：' + dataMap['errorCode'].toString() + ',' + dataMap['errorMsg'].toString());
+//    String dataStr = await json.decode(response.data.toString());
+   if(response == null ){
+     _error(errorCallBack, "数据获取为null");
    }else if (successCallBack != null){
-     successCallBack(dataMap);
+     successCallBack(response.data);
    }
   }
 

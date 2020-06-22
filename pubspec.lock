@@ -140,7 +140,7 @@ packages:
       name: cookie_jar
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.8"
+    version: "1.0.1"
   crypto:
     dependency: transitive
     description:
@@ -175,7 +175,7 @@ packages:
       name: dio
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
+    version: "2.2.2"
   event_bus:
     dependency: "direct main"
     description:
