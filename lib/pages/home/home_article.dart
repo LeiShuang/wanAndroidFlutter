@@ -17,7 +17,7 @@ class HomeArticleWidget extends StatelessWidget {
           NavigatorUtils.goWebViewPage(context, _data.title.toString(), _data.link.toString());
         },
         child: Container(
-          padding: EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
+          padding: EdgeInsets.all(5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -42,7 +42,6 @@ class HomeArticleWidget extends StatelessWidget {
                   Icon(
                     Icons.person,
                     color: Colors.yellow,
-                    size: 12.0,
                   ),
                   Text(
                     _data.author == "" ? _data.shareUser : _data.author,

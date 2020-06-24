@@ -13,6 +13,7 @@ import 'package:wanandroid/helper/dio_helper.dart';
 import 'package:wanandroid/helper/toast_helper.dart';
 import 'package:wanandroid/pages/home/home_article.dart';
 import 'package:wanandroid/pages/home/home_banner.dart';
+import 'package:wanandroid/pages/home/home_drawer_page.dart';
 import 'package:wanandroid/utils/string_utils.dart';
 import 'package:wanandroid/widgets/common_loading.dart';
 
@@ -37,12 +38,14 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
   Widget build(BuildContext context) {
     ScreenUtil.init(context,
         width: 1080, height: 1920, allowFontScaling: false);
-    /* return Scaffold(
+     return Scaffold(
+       drawer: HomeDrawerPage(),
         appBar: AppBar(
           title: Text(
             StringUtils.home,
             style: TextStyle(color: Colors.white),
           ),
+
           iconTheme: IconThemeData(color: Colors.white),
           elevation: 0,
           actions: <Widget>[
@@ -56,12 +59,12 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
         body: Column(
             children: bannerLists.length > 0 && articleLists.length > 0
                 ? _getContent()
-                : _showLoadingView()));*/
-    return Container(
+                : _showLoadingView()));
+    /*return Container(
         child: Column(
             children: bannerLists.length > 0 && articleLists.length > 0
                 ? _getContent()
-                : _showLoadingView()));
+                : _showLoadingView()));*/
   }
 
   //获取控件

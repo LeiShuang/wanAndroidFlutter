@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:wanandroid/widgets/common_loading.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 //void main() => runApp(WebDetailApp());
@@ -31,22 +31,38 @@ class WebDetailPage extends StatefulWidget {
 }
 
 class _WebDetailPageState extends State<WebDetailPage> {
+  bool isLoading = true;
   WebViewController _controller;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title: Text(widget.title),
         centerTitle: true,
 //        automaticallyImplyLeading: false,
       ),
-      body: WebView(
-        initialUrl: widget.url,
+      body: Stack(
+        children: <Widget>[
+      WebView(
+      initialUrl: widget.url,
         javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (controller){
+        onWebViewCreated: (controller) {
           _controller = controller;
         },
+        navigationDelegate: (NavigationRequest request) {
+          var url = request.url;
+          print("visit$url");
+          setState(() {
+            isLoading = true;
+          });
+          return NavigationDecision.navigate;
+        },
         onPageFinished: (url) {
+          setState(() {
+            isLoading = false;
+          });
 //          _controller.evaluateJavascript("document.title").then((result){
 //            setState(() {
 //              _title = result;
@@ -54,7 +70,9 @@ class _WebDetailPageState extends State<WebDetailPage> {
 //          });
         },
       ),
-    );
+      isLoading ? CommonLoading() : Container(),
+      ],
+    ));
   }
 }
 

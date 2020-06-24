@@ -52,10 +52,10 @@ class _SystemsPageState extends State<SystemsPage> with AutomaticKeepAliveClient
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-//      appBar: AppBar(
-//        title: Text("体系"),
-//        centerTitle: true,
-//      ),
+      appBar: AppBar(
+        title: Text("体系"),
+        centerTitle: true,
+      ),
       body: Container(
         child: ListView.builder(
           itemCount: entityList.length,

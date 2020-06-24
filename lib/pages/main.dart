@@ -52,7 +52,30 @@ class _MyAppState extends State<MyApp> {
     return RefreshConfiguration(
       headerBuilder: () => WaterDropHeader(),
       // 配置默认头部指示器,假如你每个页面的头部指示器都一样的话,你需要设置这个
-      footerBuilder: () => ClassicFooter(),
+      footerBuilder: () => CustomFooter(
+        builder: (BuildContext context,LoadStatus mode){
+          Widget body ;
+          if(mode==LoadStatus.idle){
+            body =  Text("上拉加载");
+          }
+          else if(mode==LoadStatus.loading){
+            body =  CupertinoActivityIndicator();
+          }
+          else if(mode == LoadStatus.failed){
+            body = Text("加载失败！点击重试！");
+          }
+          else if(mode == LoadStatus.canLoading){
+            body = Text("松手,加载更多!");
+          }
+          else{
+            body = Text("没有更多数据了!");
+          }
+          return Container(
+            height: 55.0,
+            child: Center(child:body),
+          );
+        },
+      ),
       // 配置默认底部指示器
       headerTriggerDistance: 80.0,
       // 头部触发刷新的越界距离

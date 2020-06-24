@@ -50,10 +50,10 @@ class _WebGuidePageState extends State<WebGuidePage> with AutomaticKeepAliveClie
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-//      appBar: AppBar(
-//        title: Text("网站导航"),
-//        centerTitle: true,
-//      ),
+      appBar: AppBar(
+        title: Text("网站导航"),
+        centerTitle: true,
+      ),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
