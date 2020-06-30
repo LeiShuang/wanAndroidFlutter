@@ -1,20 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:wanandroid/widgets/common_loading.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
-//void main() => runApp(WebDetailApp());
-
-//class WebDetailApp extends StatelessWidget {
-//  @override
-//  Widget build(BuildContext context) {
-//    return MaterialApp(
-//      title: "详情",
-//      theme: ThemeData(primarySwatch: Colors.blue),
-//      home: WebDetailPage(),
-//    );
-//  }
-//}
-
+/*
+* webview详情页面
+* */
 class WebDetailPage extends StatefulWidget {
 
   const WebDetailPage({
@@ -32,47 +23,61 @@ class WebDetailPage extends StatefulWidget {
 
 class _WebDetailPageState extends State<WebDetailPage> {
   bool isLoading = true;
-  WebViewController _controller;
-
+  final Completer<WebViewController> _controller = Completer<WebViewController>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return FutureBuilder<WebViewController>(
+      future: _controller.future,
+      builder: (context,snapshot){
+        return WillPopScope(
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(widget.title),
+                centerTitle: true,
+              ),
+              body: Stack(
+                children: [
+                  WebView(
+                    initialUrl: widget.url,
+                    javascriptMode: JavascriptMode.unrestricted,
+                    onWebViewCreated: (controller) {
+                      _controller.complete(controller);
+                    },
+                    navigationDelegate: (NavigationRequest request) {
+                      var url = request.url;
+                      print("visit$url");
+                      setState(() {
+                        isLoading = true;
+                      });
+                      return NavigationDecision.navigate;
+                    },
+                    onPageFinished: (url) {
+                      setState(() {
+                        isLoading = false;
+                      });
 
-      appBar: AppBar(
-        title: Text(widget.title),
-        centerTitle: true,
-//        automaticallyImplyLeading: false,
-      ),
-      body: Stack(
-        children: <Widget>[
-      WebView(
-      initialUrl: widget.url,
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (controller) {
-          _controller = controller;
-        },
-        navigationDelegate: (NavigationRequest request) {
-          var url = request.url;
-          print("visit$url");
-          setState(() {
-            isLoading = true;
-          });
-          return NavigationDecision.navigate;
-        },
-        onPageFinished: (url) {
-          setState(() {
-            isLoading = false;
-          });
-//          _controller.evaluateJavascript("document.title").then((result){
-//            setState(() {
-//              _title = result;
-//            });
-//          });
-        },
-      ),
-      isLoading ? CommonLoading() : Container(),
-      ],
-    ));
+                    },
+                  ),
+                  isLoading ? CommonLoading() : Container(),
+                ],
+              )
+
+            ),
+            onWillPop: () async{
+              if(snapshot.hasData){
+                var canGoBack = await snapshot.data.canGoBack();
+                if(canGoBack){
+                  await snapshot.data.goBack();
+                  return Future.value(false);//表示不退出
+                }
+              }
+
+              return Future.value(true);//表示退出
+            }
+            );
+      },
+    );
+
   }
 }
 

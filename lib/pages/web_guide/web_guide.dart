@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wanandroid/data/entitys/web_guide_entity.dart';
 import 'package:wanandroid/pages/my_system/net.dart';
 import 'package:wanandroid/routers/fluro_navigator.dart';
+import 'package:wanandroid/widgets/common_loading.dart';
 
 //void main() => runApp(WebGuideApp());
 //
@@ -49,7 +50,7 @@ class _WebGuidePageState extends State<WebGuidePage> with AutomaticKeepAliveClie
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
+    return _entityList.length > 0 ?Scaffold(
       appBar: AppBar(
         title: Text("网站导航"),
         centerTitle: true,
@@ -80,7 +81,7 @@ class _WebGuidePageState extends State<WebGuidePage> with AutomaticKeepAliveClie
 
         ],
       ),
-    );
+    ) : CommonLoading();
   }
 
   _buildListItems(int index) {

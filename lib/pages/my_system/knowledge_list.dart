@@ -4,6 +4,9 @@ import 'package:wanandroid/helper/toast_helper.dart';
 import 'package:wanandroid/routers/fluro_navigator.dart';
 import 'net.dart';
 
+/*
+* 体系页面中具体的分类的列表数据
+* */
 class KnowledgeDetailList extends StatefulWidget {
   int knowledgeId;
   String title;
@@ -107,12 +110,12 @@ class _KnowledgeDetailListState extends State<KnowledgeDetailList> {
             offstage: _isFirstLoad,
             child: RefreshIndicator(
               onRefresh: _refreshData,
-              child: ListView.separated(
+              child: ListView.builder(
                 controller: _scrollController,
-                separatorBuilder: (context,index){
-                  Widget divider=Divider(color: Colors.blue,);
-                  return divider;
-                },
+//                separatorBuilder: (context,index){
+//                  Widget divider=Divider(color: Colors.blue,);
+//                  return divider;
+//                },
                 itemCount: _mList.length,
                 itemBuilder: (context,index){
                   return _buildItemView(index);
@@ -128,37 +131,48 @@ class _KnowledgeDetailListState extends State<KnowledgeDetailList> {
 
 
   _buildItemView(int index){
-    return GestureDetector(
-      onTap: (){
-        String url = _mList[index].link;
-        String title = _mList[index].title;
-        NavigatorUtils.goWebViewPage(context, title, url);
-      },
-      child:   Container(
-        margin: const EdgeInsets.all(8.0),
-        height: 60.0,
-        child: Row(
-          children: [
-            Expanded(
-                flex: 2,
-                child: Center(
-                  child: Text(
-                    _mList[index].title,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                )
+    return Card(
+        elevation: 4.0,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(14.0))),
+        child: InkWell(
+          onTap: (){
+            String url = _mList[index].link;
+            String title = _mList[index].title;
+            NavigatorUtils.goWebViewPage(context, title, url);
+          },
+          child:  Container(
+            padding: const EdgeInsets.all(2.0),
+            height: 60.0,
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 2,
+                    child: Center(
+                      child: Text(
+                        _mList[index].title,
+                        style: TextStyle(fontSize: 16),
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                ),
+//                Expanded(
+//                  flex: 1,
+//                  child: Text(
+//                    "日期："+_mList[index].niceDate,
+//                    style: TextStyle(fontSize: 14),
+//                  ),
+//                )
+              ],
             ),
-            Expanded(
-              flex: 1,
-              child: Text(
-                "日期："+_mList[index].niceDate,
-                style: TextStyle(fontSize: 14),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+          ),
+
+        )
+
+      );
+
+
 
   }
 }
