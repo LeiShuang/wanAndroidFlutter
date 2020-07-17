@@ -5,7 +5,12 @@ import 'package:wanandroid/data/entitys/system_data_entity.dart';
 import 'package:wanandroid/helper/toast_helper.dart';
 import 'package:wanandroid/pages/my_system/system_router.dart';
 import 'package:wanandroid/routers/fluro_navigator.dart';
+
 import 'net.dart';
+
+import 'package:wanandroid/widgets/common_loading.dart';
+
+
 class SystemsPage extends StatefulWidget {
   @override
   _SystemsPageState createState() => _SystemsPageState();
@@ -35,7 +40,7 @@ class _SystemsPageState extends State<SystemsPage> with AutomaticKeepAliveClient
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
+    return entityList.length > 0 ? Scaffold(
       appBar: AppBar(
         title: Text("体系"),
         centerTitle: true,
@@ -48,7 +53,7 @@ class _SystemsPageState extends State<SystemsPage> with AutomaticKeepAliveClient
           }
         ),
       ),
-    );
+    ) : CommonLoading();
   }
 
   /*
