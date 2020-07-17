@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wanandroid/data/entitys/project_top_title_entity.dart';
 import 'package:wanandroid/helper/dio_helper.dart';
 import 'package:wanandroid/data/api/requeststring.dart';
@@ -28,40 +29,43 @@ class _ProjectPageState extends State<ProjectPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('项目',style: TextStyle(color:Colors.white),),
+        title: Text(
+          '项目',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
-      body:_tabItems.length > 0
+      body: _tabItems.length > 0
           ? Column(
-        children: <Widget>[
-          Container(
-            child: TabBar(
-                isScrollable: true,
-                controller: _tabController,
-                labelPadding: EdgeInsets.all(5),
-                labelColor: ThemeUtils.defaultColor,
-                indicatorColor: ThemeUtils.defaultColor,
-                indicatorPadding: EdgeInsets.all(5),
-                tabs: _tabItems.map((titleData) {
-                  return Text(
-                    titleData.name,
-                    style: TextStyle(color:ThemeUtils.defaultColor, fontSize: 16.0),
-                  );
-                }).toList()),
-          ),
-          Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: _tabItems.map((items) {
-                  return ProjectListPage(
-                    id: items.id,
-                  );
-                }).toList(),
-              ))
-        ],
-      )
-          : CommonLoading(),
+              children: <Widget>[
+                Container(
+                  child: TabBar(
+                      isScrollable: true,
+                      controller: _tabController,
+                      labelPadding: EdgeInsets.all(5),
+                      labelColor: ThemeUtils.defaultColor,
+                      indicatorColor: ThemeUtils.defaultColor,
+                      indicatorPadding: EdgeInsets.all(5),
+                      tabs: _tabItems.map((titleData) {
+                        return Text(
+                          titleData.name,
+                          style: TextStyle(
+                              color: ThemeUtils.defaultColor, fontSize: 16.0),
+                        );
+                      }).toList()),
+                ),
+                Expanded(
+                    child: TabBarView(
+                  controller: _tabController,
+                  children: _tabItems.map((items) {
+                    return ProjectListPage(
+                      id: items.id,
+                    );
+                  }).toList(),
+                ))
+              ],
+            )
+          : _showLoadingView(),
     );
-
   }
 
   @override
@@ -78,4 +82,11 @@ class _ProjectPageState extends State<ProjectPage>
       ToastHelper.showToast(errMsg.toString());
     });
   }
+}
+
+Widget _showLoadingView() {
+  return Container(
+    height: ScreenUtil().setHeight(1400),
+    child: CommonLoading(),
+  );
 }

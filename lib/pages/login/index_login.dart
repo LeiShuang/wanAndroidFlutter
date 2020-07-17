@@ -1,11 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wanandroid/data/api/requeststring.dart';
+import 'package:wanandroid/data/entitys/login_info_entity_entity.dart';
 import 'package:wanandroid/helper/dio_helper.dart';
 import 'package:wanandroid/helper/toast_helper.dart';
 import 'package:wanandroid/routers/fluro_navigator.dart';
+import 'package:wanandroid/routers/fluro_navigator.dart' as prefix0;
 import 'package:wanandroid/routers/routers.dart';
 import 'package:wanandroid/utils/images_provider.dart';
+import 'package:wanandroid/utils/prefer_constants.dart';
 import 'package:wanandroid/utils/theme_utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,13 +19,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool showPhoneClose = false;
-  bool showPasswordClose = false;
   String phone;
   String password;
   TextEditingController _onPhoneController = TextEditingController();
   TextEditingController _onPasswordController = TextEditingController();
   SharedPreferences prefs;
+  bool isLogin = false;
 
   @override
   void initState() {
@@ -30,6 +34,20 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    var loadingView;
+    if (isLogin) {
+      loadingView = Center(
+          child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[CupertinoActivityIndicator(), Text("登录中，请稍等...")],
+        ),
+      ));
+    } else {
+      loadingView = Center();
+    }
+
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -47,12 +65,10 @@ class _LoginPageState extends State<LoginPage> {
               height: 100,
             ),
           ),
-          createInputBox(_onUserNameChange, _onPhoneController,
-              Icons.phone_android, showPhoneClose, false),
-          createInputBox(_onPassWordChange, _onPasswordController,
-              Icons.lock_outline, showPasswordClose, true),
+          createInputBox(_onPhoneController, Icons.person, false),
+          createInputBox(_onPasswordController, Icons.lock_outline, true),
           Padding(
-            padding: EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
+            padding: EdgeInsets.only(left: 30, top: 20, right: 30, bottom: 20),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -60,7 +76,17 @@ class _LoginPageState extends State<LoginPage> {
                   height: 45,
                   child: RaisedButton(
                     onPressed: () {
-                      _login;
+                      if (isLogin) {
+                        return;
+                      }
+                      if (_onPhoneController.text.trim().toString().length ==
+                              0 ||
+                          _onPasswordController.text.trim().toString().length ==
+                              0) {
+                        ToastHelper.showWarning("账号或密码为空!");
+                        return;
+                      }
+                      _login();
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0)),
@@ -68,8 +94,8 @@ class _LoginPageState extends State<LoginPage> {
                       '登录',
                       style: TextStyle(color: Colors.white),
                     ),
-                    color: Colors.lightBlue,
-                    highlightColor: Colors.blue,
+                    color: ThemeUtils.defaultColor,
+                    highlightColor: ThemeUtils.defaultColor,
                   ),
                 ))
               ],
@@ -82,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
               InkWell(
                   onTap: () {
                     NavigatorUtils.goBack(context);
-                    NavigatorUtils.push(context, Routes.loginPage);
+                    NavigatorUtils.push(context, Routes.registerPage);
                   },
                   child: Text(
                     '去注册',
@@ -91,7 +117,13 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ))
             ],
-          )
+          ),
+          Expanded(
+              child: Column(
+            children: <Widget>[
+              Expanded(child: loadingView),
+            ],
+          ))
         ],
       ),
     );
@@ -101,75 +133,41 @@ class _LoginPageState extends State<LoginPage> {
     prefs = await SharedPreferences.getInstance();
   }
 
-  void _onUserNameChange(String username) {
-    phone = username;
-    if (phone.length > 0) {
-      setState(() {
-        showPhoneClose = true;
-      });
-    } else {
-      setState(() {
-        showPhoneClose = false;
-      });
-    }
-  }
-
-  void _onPassWordChange(String passWord) {
-    password = passWord;
-    if (password.length > 0) {
-      setState(() {
-        showPasswordClose = true;
-      });
-    } else {
-      setState(() {
-        showPasswordClose = false;
-      });
-    }
-  }
-
   createInputBox(
-      ValueChanged<String> onStringChange,
-      TextEditingController controller,
-      IconData icon,
-      bool showCloseIcon,
-      bool isPassWord) {
+      TextEditingController controller, IconData icon, bool isPassWord) {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20, top: 20),
       padding: EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.blue),
-        borderRadius: BorderRadius.circular(5),
-      ),
+          border: Border.all(color: Colors.blue),
+          borderRadius: BorderRadius.circular(5)),
       child: Stack(
         alignment: Alignment.centerRight,
         children: <Widget>[
           TextField(
             obscureText: isPassWord ? true : false,
-            style: TextStyle(fontSize: 16.0),
+            style: TextStyle(
+              fontSize: 16,
+            ),
+//                  maxLength: 10,
             maxLines: 1,
-            onChanged: onStringChange,
             controller: controller,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.fromLTRB(0, 5, 50, 5),
               border: InputBorder.none,
               icon: Icon(
                 icon,
-                color: ThemeUtils.defaultColor,
+                color: Colors.blue,
               ),
-              hintText: isPassWord ? "请输入密码" : "请输入用户名",
+              labelText: !isPassWord ? '请输入用户名' : '请输入密码',
             ),
           ),
-          showCloseIcon
+          controller.text.length > 0
               ? Container(
                   margin: EdgeInsets.only(right: 20),
                   child: InkWell(
                     onTap: () {
                       controller.clear();
-                      setState(() {
-                        isPassWord
-                            ? showPasswordClose = false
-                            : showPhoneClose = false;
-                      });
                     },
                     child: Icon(
                       Icons.close,
@@ -177,17 +175,49 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 )
-              : Container()
+              : Container(),
         ],
       ),
     );
   }
-  _login(){
-    DioHelper().post(RequestUrl.login,{'username':phone,'password':password}, (logindata){
-      ToastHelper.showToast("登录成功");
 
-    }, (errMsg){
+  void _login() async {
+    setState(() {
+      isLogin = true;
+    });
+
+    DioHelper().post(RequestUrl.login, {
+      'username': _onPhoneController.text.trim().toString(),
+      'password': _onPasswordController.text.trim().toString()
+    }, (loginData) {
+      setState(() {
+        isLogin = false;
+      });
+
+      LoginInfoEntityEntity loginInfo =
+          LoginInfoEntityEntity().fromJson(loginData);
+      if (loginInfo.errorCode == 0) {
+        //登录成功
+        print("登陆成功");
+        PrefsProvider.saveLoginInfo(loginInfo.data, phone, password);
+        NavigatorUtils.goBack(context);
+        NavigatorUtils.push(context, Routes.home);
+      } else {
+        ToastHelper.showWarning(loginInfo.errorMsg);
+      }
+    }, (errMsg) {
+      setState(() {
+        isLogin = false;
+      });
+
       ToastHelper.showToast(errMsg);
     });
+  }
+
+  @override
+  void dispose() {
+    _onPhoneController.dispose();
+    _onPasswordController.dispose();
+    super.dispose();
   }
 }

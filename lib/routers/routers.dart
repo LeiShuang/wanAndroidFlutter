@@ -1,6 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:wanandroid/pages/login/index_login.dart';
+import 'package:wanandroid/pages/login/index_register.dart';
 import 'package:wanandroid/pages/main.dart';
 import 'package:wanandroid/pages/my_system/system_router.dart';
 import 'package:wanandroid/pages/web_detail/web_detail.dart';
@@ -13,7 +14,7 @@ class Routes {
   static String home = '/home';
   static String webViewPage = '/webview';
   static String loginPage = '/login';
-
+  static String registerPage = '/register';
   static final List<IRouterProvider> _listRouter = [];
 
   static void configureRoutes(Router router) {
@@ -41,6 +42,8 @@ class Routes {
             handlerFunc:
                 (BuildContext context, Map<String, List<String>> params) =>
                     LoginPage()));
+
+    router.define(registerPage, handler: Handler(handlerFunc: (BuildContext context,Map<String,List<String>> params) =>RegisterPage()));
 
     _listRouter.clear();
 

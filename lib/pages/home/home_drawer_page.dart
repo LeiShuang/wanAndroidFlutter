@@ -4,6 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart' as prefix0;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wanandroid/data/api/requeststring.dart';
+import 'package:wanandroid/data/entitys/base_model_entity.dart';
+import 'package:wanandroid/helper/dio_helper.dart';
+import 'package:wanandroid/helper/toast_helper.dart';
+import 'package:wanandroid/routers/fluro_navigator.dart';
+import 'package:wanandroid/routers/fluro_navigator.dart' as prefix1;
+import 'package:wanandroid/routers/routers.dart';
 import 'package:wanandroid/utils/prefer_constants.dart';
 import 'package:wanandroid/pages/login/index_login.dart';
 
@@ -29,9 +36,18 @@ class _HomeDrawerPageState extends State<HomeDrawerPage> {
                   '取消',
                   style: TextStyle(color: Colors.red[200]),
                 ),
+                onPressed: () {
+                  NavigatorUtils.goBack(context);
+                },
               ),
               CupertinoDialogAction(
-                  child: Text('确定', style: TextStyle(color: Colors.black))),
+                child: Text('确定', style: TextStyle(color: Colors.black)),
+                onPressed: () {
+                  NavigatorUtils.goBack(context);
+                  //注销操作，并跳转到登录页
+                  _loginOut();
+                },
+              ),
             ],
           );
         });
@@ -111,5 +127,17 @@ class _HomeDrawerPageState extends State<HomeDrawerPage> {
     SharedPreferences sp = await SharedPreferences.getInstance();
     userName = sp.getString(PrefsProvider.USER_NAME) ?? '';
     setState(() {});
+  }
+
+  _loginOut() async {
+    await DioHelper().get(RequestUrl.loginOut, null, (successInfo) {
+      BaseModelEntity info = BaseModelEntity().fromJson(successInfo);
+      setState(() {
+        PrefsProvider.clearLoginInfo();
+      });
+      NavigatorUtils.push(context, Routes.loginPage);
+    }, (errorCallBack) {
+      ToastHelper.showWarning(errorCallBack.toString());
+    });
   }
 }
