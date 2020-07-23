@@ -5,11 +5,10 @@ EventBus eventBus = EventBus();
 
 class LoginEvent{}
 class LogoutEvent{}
-
-class ChangeThemeEvent {
+class ChangeTheThemeEvent {
 
   Color color;
 
-  ChangeThemeEvent(this.color);
+  ChangeTheThemeEvent(this.color);
 
 }

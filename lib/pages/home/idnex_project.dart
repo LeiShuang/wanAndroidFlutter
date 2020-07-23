@@ -82,6 +82,11 @@ class _ProjectPageState extends State<ProjectPage>
       ToastHelper.showToast(errMsg.toString());
     });
   }
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+  }
 }
 
 Widget _showLoadingView() {

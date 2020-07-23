@@ -14,6 +14,8 @@ import 'package:wanandroid/helper/toast_helper.dart';
 import 'package:wanandroid/pages/home/home_article.dart';
 import 'package:wanandroid/pages/home/home_banner.dart';
 import 'package:wanandroid/pages/home/home_drawer_page.dart';
+import 'package:wanandroid/routers/fluro_navigator.dart';
+import 'package:wanandroid/routers/routers.dart';
 import 'package:wanandroid/utils/string_utils.dart';
 import 'package:wanandroid/widgets/common_loading.dart';
 
@@ -52,7 +54,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
             IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () {
-                  ToastHelper.showToast('点击了搜索');
+                  NavigatorUtils.push(context, Routes.homeSearch);
                 })
           ],
         ),
@@ -101,13 +103,19 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
     });
   }
 
-  void _getArticleListData() {
-    DioHelper().get('article/list/$_index/json', null, (articleData) {
+  void _getArticleListData() async{
+    await DioHelper().get('article/list/$_index/json', null, (articleData) {
       setState(() {
         List<HomeArticleEntityDataData> articles =
             HomeArticleEntityEntity().fromJson(articleData).data.datas;
-        articleLists.clear();
-        articleLists.addAll(articles);
+        if(mounted){
+          if(_index == 0 ){
+            articleLists.clear();
+            articleLists.addAll(articles);
+          }else{
+            articleLists.addAll(articles);
+          }
+        }
         print("articleInfo:" + articles.toString());
       });
     }, (error) {

@@ -4,5 +4,6 @@ class RequestUrl{
   static final String login = "user/login";//登录
   static final String loginOut = "user/logout/json";//注销
   static final String register = "user/register";//注册
+  static final String hotSearch = "hotkey/json";//热词
 
 }

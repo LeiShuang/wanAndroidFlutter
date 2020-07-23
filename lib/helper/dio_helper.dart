@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:wanandroid/config/dio_err_code.dart';
 import 'package:wanandroid/config/globalconfig.dart';
-import 'dart:convert';
+import 'package:wanandroid/utils/prefer_constants.dart';
 
 class DioHelper {
   // 单例公开访问点，工厂创建唯一(懒汉式)
@@ -9,6 +14,7 @@ class DioHelper {
 
   static DioHelper _instance;
   Dio _dio;
+  PersistCookieJar cookieJar;
 
   //私有构造方法
   DioHelper._({String baseUrl}) {
@@ -17,11 +23,21 @@ class DioHelper {
       // 初始化
       _dio.options.baseUrl = baseUrl == null ? GlobalConfig.BASE_URL : baseUrl;
       _dio.options.responseType = ResponseType.json;
+      _dio.options.contentType =Headers.jsonContentType;
       _dio.options.connectTimeout = 3000;
       _dio.options.receiveTimeout = 3000;
       _dio.interceptors.add(LogInterceptor(requestBody: GlobalConfig.isDebug));
+      getCookieJar().then((value) => _dio.interceptors.add(CookieManager(value)));
     }
+  }
 
+  Future<PersistCookieJar> getCookieJar() async {
+    if (cookieJar == null) {
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String appDocPath = appDocDir.path + "/.cookies/";
+      cookieJar = PersistCookieJar(dir: appDocPath);
+    }
+    return cookieJar;
   }
 
   static DioHelper _DioHelperInstance() {
@@ -32,7 +48,7 @@ class DioHelper {
   }
 
   //GET请求
-  get(String url,  Map<String, dynamic> params, Function successCallBack,
+  get(String url, Map<String, dynamic> params, Function successCallBack,
       Function errorCallBack) async {
     _request(url, successCallBack, 'get', params, errorCallBack);
   }
@@ -43,7 +59,9 @@ class DioHelper {
   }
 
   _request(String url, Function successCallBack,
-      [String method,  Map<String, dynamic> params, Function errorCallBack]) async {
+      [String method,
+      Map<String, dynamic> params,
+      Function errorCallBack]) async {
     Response response;
     try {
       if (method == 'get') {
@@ -60,7 +78,7 @@ class DioHelper {
       Response errorResponse;
       errorResponse = error.response != null
           ? error.response
-          : new Response(statusCode: 666);
+          : new Response(statusCode:  666);
 
       if (error.type == DioErrorType.CONNECT_TIMEOUT) {
         //处理请求超时
@@ -71,11 +89,11 @@ class DioHelper {
       }
 
       //Debug模式打印日志
-      if(GlobalConfig.isDebug){
-          print('请求异常:' + error.toString());
-          print('请求异常url: ' + url);
-          print('请求头: ' + _dio.options.headers.toString());
-          print('method: ' + _dio.options.method);
+      if (GlobalConfig.isDebug) {
+        print('请求异常:' + error.toString());
+        print('请求异常url: ' + url);
+        print('请求头: ' + _dio.options.headers.toString());
+        print('method: ' + _dio.options.method);
       }
       _error(errorCallBack, error.message);
       return '';
@@ -93,17 +111,16 @@ class DioHelper {
         print('返回参数: ' + response.data.toString());
       }
     }
-   if(response == null ){
-     _error(errorCallBack, "数据获取为null");
-   }else if (successCallBack != null){
-     successCallBack(response.data);
-   }
-  }
-
-
-  }
-  _error(Function errorCallBack, String error) {
-    if (errorCallBack != null) {
-      errorCallBack(error);
+    if (response == null) {
+      _error(errorCallBack, "数据获取为null");
+    } else if (successCallBack != null) {
+      successCallBack(response.data);
     }
+  }
+}
+
+_error(Function errorCallBack, String error) {
+  if (errorCallBack != null) {
+    errorCallBack(error);
+  }
 }

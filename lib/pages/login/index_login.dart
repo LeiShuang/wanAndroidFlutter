@@ -94,8 +94,8 @@ class _LoginPageState extends State<LoginPage> {
                       '登录',
                       style: TextStyle(color: Colors.white),
                     ),
-                    color: ThemeUtils.defaultColor,
-                    highlightColor: ThemeUtils.defaultColor,
+                    color: ThemeUtils.currentColorTheme,
+                    highlightColor: ThemeUtils.currentColorTheme,
                   ),
                 ))
               ],

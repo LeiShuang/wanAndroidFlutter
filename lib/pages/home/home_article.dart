@@ -68,7 +68,7 @@ class HomeArticleWidget extends StatelessWidget {
           ToastHelper.showToast("点击了tab");
         }
       },
-      child: Container(
+      child:Container(
         height: 22,
         alignment: Alignment.center,
         margin: EdgeInsets.only(left: 5, right: 5),
@@ -78,10 +78,12 @@ class HomeArticleWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
         ),
         child: Text(
-          superChapterName,
+         superChapterName,
           style: TextStyle(fontSize: 12),
         ),
-      ),
+      ) ,
     );
   }
+
 }
+

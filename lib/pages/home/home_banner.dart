@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:wanandroid/data/entitys/banner_entity_entity.dart';
 import 'package:wanandroid/helper/toast_helper.dart';
+import 'package:wanandroid/routers/fluro_navigator.dart';
 
 class HomeTopBanner extends StatelessWidget {
   final List<BannerEntityData> _bannerLists;
@@ -25,7 +26,8 @@ class HomeTopBanner extends StatelessWidget {
         autoplay: true,
         autoplayDisableOnInteraction: true,
         onTap: (index) {
-          ToastHelper.showToast('点击了轮播图:$index');
+          NavigatorUtils.goWebViewPage(
+              context, _bannerLists[index].title, _bannerLists[index].url);
         },
       ),
     );

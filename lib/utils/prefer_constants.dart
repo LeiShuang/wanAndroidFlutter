@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wanandroid/data/entitys/login_info_entity_entity.dart';
 
 class PrefsProvider {
+  static const String THEME_COLOR = "themeColor";
   static const String SP_USER_NAME = 'user_name';
   static const String SP_PASSWORD = "pass_word";
   static const String USER_NAME = "username";
@@ -19,8 +20,18 @@ class PrefsProvider {
   static const String SP_PUBLIC_NAME = "publicName";
   static const String SP_TOKEN = "token";
   static const String SP_TYPE = "type";
-  static const String SP_COOKIE = "cookie";
+  static const String SP_COOKIE = "Cookie";
   static const String SP_HAS_LOGIN = "handLogin";
+
+  static Future<void> changeThemeColor(int colorIndex) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setInt(THEME_COLOR, colorIndex);
+  }
+  //获取主题的颜色index
+  static Future<int> getThemeColor() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    return sp.getInt(THEME_COLOR);
+  }
 
   static Future<void> saveLoginInfo(LoginInfoEntityData infoEntityData,
       String userName, String passWord) async {
@@ -38,7 +49,7 @@ class PrefsProvider {
       ..setString(SP_PUBLIC_NAME, infoEntityData.publicName)
       ..setString(SP_TOKEN, infoEntityData.token)
       ..setInt(SP_TYPE, infoEntityData.type)
-      ..setString(SP_COOKIE, "loginUserName=$userName,loginPassWord=$passWord")
+      ..setString(SP_COOKIE, "loginUserName=$userName,loginUserPassword=$passWord")
       ..setBool(SP_HAS_LOGIN, true);
   }
 
@@ -84,17 +95,17 @@ class PrefsProvider {
     }
   }
 
-  static Future<Map<String, String>> getCookies() async {
-    Map<String, String> cookieMap = Map();
+
+  static Future<Map<String, dynamic>> getCookies() async {
+    Map<String, dynamic> cookieMap = Map();
     SharedPreferences sp = await SharedPreferences.getInstance();
-    cookieMap["Cookice"] = sp.getString(SP_COOKIE);
-    return cookieMap;
+    cookieMap["Cookie"] = sp.getString(SP_COOKIE);
+    return  cookieMap["Cookie"];
   }
 
-  static Future<bool> hasLogin()async{
+  static Future<bool> hasLogin() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-     bool hasLogin = sp.getBool(SP_HAS_LOGIN);
-     return hasLogin;
-
+    bool hasLogin = sp.getBool(SP_HAS_LOGIN);
+    return hasLogin;
   }
 }

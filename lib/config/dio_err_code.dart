@@ -3,11 +3,11 @@
  */
 class ResultCode {
 
-  //正常返回是1
-  static const SUCCESS = 1;
+  //正常返回是0
+  static const SUCCESS = 0;
 
-  //异常返回是0
-  static const ERROR = 1;
+  //异常返回是1
+  static const ERROR = 1 ;
 
   /// When opening  url timeout, it occurs.
   static const CONNECT_TIMEOUT = -1;

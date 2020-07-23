@@ -43,9 +43,10 @@ class _HomeDrawerPageState extends State<HomeDrawerPage> {
               CupertinoDialogAction(
                 child: Text('确定', style: TextStyle(color: Colors.black)),
                 onPressed: () {
-                  NavigatorUtils.goBack(context);
+//                  NavigatorUtils.goBack(context);
                   //注销操作，并跳转到登录页
                   _loginOut();
+                  Navigator.pop(context);
                 },
               ),
             ],
@@ -63,7 +64,12 @@ class _HomeDrawerPageState extends State<HomeDrawerPage> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQueryData.fromWindow(window).size.width * 0.8,
-      decoration: BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        image:
+            new DecorationImage(image: AssetImage("images/splash_bg3.jpg")
+            ,fit: BoxFit.cover),
+      ),
       child: Column(
         children: <Widget>[
           UserAccountsDrawerHeader(
@@ -102,10 +108,18 @@ class _HomeDrawerPageState extends State<HomeDrawerPage> {
               Icons.favorite,
               color: Colors.red,
             ),
+            onTap: () {
+              NavigatorUtils.goBack(context);
+              NavigatorUtils.push(context, Routes.myCollection);
+            },
           ),
           ListTile(
             title: Text('主题色选择'),
             leading: Icon(Icons.color_lens, color: Colors.yellow),
+            onTap: () {
+              NavigatorUtils.goBack(context);
+              NavigatorUtils.push(context, Routes.changeTheme);
+            },
           ),
           userName.length != 0
               ? InkWell(
@@ -134,6 +148,7 @@ class _HomeDrawerPageState extends State<HomeDrawerPage> {
       BaseModelEntity info = BaseModelEntity().fromJson(successInfo);
       setState(() {
         PrefsProvider.clearLoginInfo();
+        userName = '';
       });
       NavigatorUtils.push(context, Routes.loginPage);
     }, (errorCallBack) {
