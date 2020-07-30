@@ -18,10 +18,13 @@ class _ChangeThemePageState extends State<ChangeThemePage> {
     super.initState();
     PrefsProvider.getThemeColor().then((i) {
       print("当前颜色值的i为$i");
-      selected = i;
-      if (i == null) {
-        selected = 0;
-      }
+      setState(() {
+        selected = i;
+        if (i == null) {
+          selected = 0;
+        }
+      });
+
     });
   }
 

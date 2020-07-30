@@ -13,6 +13,7 @@ class ResultCode {
   static const CONNECT_TIMEOUT = -1;
 
   ///It occurs when receiving timeout.
+
   static const RECEIVE_TIMEOUT = -2;
 
   /// When the server response, but with a incorrect status, such as 404, 503...
@@ -22,4 +23,7 @@ class ResultCode {
 
   /// read the DioError.error if it is not null.
   static const DEFAULT = -5;
+
+  /// When opening  url timeout, it occurs.
+  static const RELOGIN = -1001;
 }

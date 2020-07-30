@@ -5,6 +5,7 @@ import 'package:wanandroid/helper/dio_helper.dart';
 import 'package:wanandroid/helper/toast_helper.dart';
 import 'package:wanandroid/pages/home/home_article.dart';
 import 'package:wanandroid/widgets/common_loading.dart';
+import 'package:wanandroid/widgets/loading_state.dart';
 
 class SearchListPage extends StatefulWidget {
   const SearchListPage({Key key, @required String title})
@@ -17,6 +18,7 @@ class SearchListPage extends StatefulWidget {
 }
 
 class _SearchListPageState extends State<SearchListPage> {
+  LoadState _loadState = LoadState.State_Loading;
   int _page = 0;
   List<HomeArticleEntityDataData> lists = List();
   RefreshController _controller = RefreshController(initialRefresh: false);
@@ -37,7 +39,7 @@ class _SearchListPageState extends State<SearchListPage> {
           ),
           iconTheme: IconThemeData(color: Colors.white),
         ),
-        body: Container(
+        body: _getList()/* Container(
           child: lists.length > 0
               ? SmartRefresher(
                   controller: _controller,
@@ -53,7 +55,31 @@ class _SearchListPageState extends State<SearchListPage> {
                   }),
                 )
               : CommonLoading(),
-        ));
+        )*/);
+  }
+  Widget _getList(){
+    return LoadStateLayout(loadState: _loadState, errRetry: (){
+      setState(() {
+        _loadState = LoadState.State_Error;
+      });
+    }, emptyRetry: (){
+      setState(() {
+        _loadState = LoadState.State_Empty;
+      });
+
+    }, successWidget: SmartRefresher(
+      controller: _controller,
+      onRefresh: _onRefresh,
+      onLoading: _onLoadMore,
+      enablePullUp: true,
+      child: ListView.builder(
+          itemCount: lists.length,
+          itemBuilder: (BuildContext context, int index) {
+            return HomeArticleWidget(
+              data: lists[index],
+            );
+          }),
+    ));
   }
 
   void _getSearchData() async {
@@ -61,9 +87,15 @@ class _SearchListPageState extends State<SearchListPage> {
         (successCallBack) {
       HomeArticleEntityEntity info =
           HomeArticleEntityEntity().fromJson(successCallBack);
+      if (mounted) {
       if (info.errorCode == 0) {
-        if (mounted) {
+        if(info.data.datas.length == 0 && _page == 0){
           setState(() {
+            _loadState = LoadState.State_Empty;
+          });
+        }else{
+          setState(() {
+            _loadState = LoadState.State_Success;
             if (_page == 0) {
               lists.clear();
               lists.addAll(info.data.datas);
@@ -73,11 +105,15 @@ class _SearchListPageState extends State<SearchListPage> {
           });
 
         }
-      } else {
-        ToastHelper.showWarning(info.errorMsg.toString());
+
+
+        }
       }
     }, (errorCallBack) {
-      ToastHelper.showWarning(errorCallBack.toString());
+      setState(() {
+        _loadState = LoadState.State_Error;
+        ToastHelper.showWarning(errorCallBack.toString());
+      });
     });
   }
 

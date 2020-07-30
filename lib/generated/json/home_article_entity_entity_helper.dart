@@ -117,6 +117,9 @@ homeArticleEntityDataDataFromJson(HomeArticleEntityDataData data, Map<String, dy
 	if (json['origin'] != null) {
 		data.origin = json['origin']?.toString();
 	}
+	if(json['originId'] != null){
+		data.originId = json['originId']?.toInt();
+	}
 	if (json['prefix'] != null) {
 		data.prefix = json['prefix']?.toString();
 	}
@@ -185,6 +188,7 @@ Map<String, dynamic> homeArticleEntityDataDataToJson(HomeArticleEntityDataData e
 	data['niceDate'] = entity.niceDate;
 	data['niceShareDate'] = entity.niceShareDate;
 	data['origin'] = entity.origin;
+	data['originId'] = entity.originId;
 	data['prefix'] = entity.prefix;
 	data['projectLink'] = entity.projectLink;
 	data['publishTime'] = entity.publishTime;

@@ -5,6 +5,7 @@ import 'package:wanandroid/data/entitys/system_data_entity.dart';
 import 'package:wanandroid/helper/toast_helper.dart';
 import 'package:wanandroid/pages/my_system/system_router.dart';
 import 'package:wanandroid/routers/fluro_navigator.dart';
+import 'package:wanandroid/widgets/loading_state.dart';
 
 import 'net.dart';
 
@@ -20,7 +21,7 @@ class _SystemsPageState extends State<SystemsPage> with AutomaticKeepAliveClient
 
   @override
   bool get wantKeepAlive => true;
-
+  LoadState _loadState = LoadState.State_Loading;
   List<SystemDataData> entityList = new List();
 
   @override
@@ -29,7 +30,16 @@ class _SystemsPageState extends State<SystemsPage> with AutomaticKeepAliveClient
 
     getSystemList().then((value) =>{
       setState((){
-        entityList.addAll(value.data);
+        if(value.errorCode == 0){
+         if(value.data.length == 0){
+           _loadState = LoadState.State_Empty;
+         }else{
+           _loadState = LoadState.State_Success;
+         }
+         entityList.addAll(value.data);
+        }else{
+          _loadState = LoadState.State_Error;
+        }
       })
 
     }
@@ -40,7 +50,29 @@ class _SystemsPageState extends State<SystemsPage> with AutomaticKeepAliveClient
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return entityList.length > 0 ? Scaffold(
+    return
+      Scaffold(
+        appBar: AppBar(
+          title: Text("体系"),
+          centerTitle: true,
+        ),
+        body: LoadStateLayout(loadState: _loadState, errRetry: (){
+            setState(() {
+              _loadState = LoadState.State_Error;
+            });
+        }, emptyRetry: (){
+            setState(() {
+              _loadState = LoadState.State_Empty;
+            });
+        }, successWidget: Container(
+        child: ListView.builder(
+        itemCount: entityList.length,
+            itemBuilder:(context,index){
+              return _buildItems(index);
+            }
+        ),
+      ))
+      );/*entityList.length > 0 ? Scaffold(
       appBar: AppBar(
         title: Text("体系"),
         centerTitle: true,
@@ -53,7 +85,7 @@ class _SystemsPageState extends State<SystemsPage> with AutomaticKeepAliveClient
           }
         ),
       ),
-    ) : CommonLoading();
+    ) : CommonLoading();*/
   }
 
   /*

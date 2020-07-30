@@ -17,6 +17,8 @@ import 'package:wanandroid/data/entitys/login_info_entity_entity.dart';
 import 'package:wanandroid/generated/json/login_info_entity_entity_helper.dart';
 import 'package:wanandroid/data/entitys/project_top_title_entity.dart';
 import 'package:wanandroid/generated/json/project_top_title_entity_helper.dart';
+import 'package:wanandroid/data/entitys/top_article_entity.dart';
+import 'package:wanandroid/generated/json/top_article_entity_helper.dart';
 import 'package:wanandroid/data/entitys/search_info_entity.dart';
 import 'package:wanandroid/generated/json/search_info_entity_helper.dart';
 import 'package:wanandroid/data/entitys/home_article_entity_entity.dart';
@@ -25,128 +27,250 @@ import 'package:wanandroid/data/entitys/hot_key_entity.dart';
 import 'package:wanandroid/generated/json/hot_key_entity_helper.dart';
 
 class JsonConvert<T> {
-	T fromJson(Map<String, dynamic> json) {
-		return _getFromJson<T>(runtimeType, this, json);
-	}
+  T fromJson(Map<String, dynamic> json) {
+    return _getFromJson<T>(runtimeType, this, json);
+  }
 
   Map<String, dynamic> toJson() {
-		return _getToJson<T>(runtimeType, this);
+    return _getToJson<T>(runtimeType, this);
   }
 
   static _getFromJson<T>(Type type, data, json) {
-    switch (type) {			case SystemListEntity:
-			return systemListEntityFromJson(data as SystemListEntity, json) as T;			case SystemListData:
-			return systemListDataFromJson(data as SystemListData, json) as T;			case SystemListDataData:
-			return systemListDataDataFromJson(data as SystemListDataData, json) as T;			case BaseModelEntity:
-			return baseModelEntityFromJson(data as BaseModelEntity, json) as T;			case BannerEntityEntity:
-			return bannerEntityEntityFromJson(data as BannerEntityEntity, json) as T;			case BannerEntityData:
-			return bannerEntityDataFromJson(data as BannerEntityData, json) as T;			case WebGuideEntity:
-			return webGuideEntityFromJson(data as WebGuideEntity, json) as T;			case WebGuideData:
-			return webGuideDataFromJson(data as WebGuideData, json) as T;			case WebGuideDataArticle:
-			return webGuideDataArticleFromJson(data as WebGuideDataArticle, json) as T;			case SystemDataEntity:
-			return systemDataEntityFromJson(data as SystemDataEntity, json) as T;			case SystemDataData:
-			return systemDataDataFromJson(data as SystemDataData, json) as T;			case SystemDataDatachild:
-			return systemDataDatachildFromJson(data as SystemDataDatachild, json) as T;			case LoginInfoEntityEntity:
-			return loginInfoEntityEntityFromJson(data as LoginInfoEntityEntity, json) as T;			case LoginInfoEntityData:
-			return loginInfoEntityDataFromJson(data as LoginInfoEntityData, json) as T;			case ProjectTopTitleEntity:
-			return projectTopTitleEntityFromJson(data as ProjectTopTitleEntity, json) as T;			case ProjectTopTitleData:
-			return projectTopTitleDataFromJson(data as ProjectTopTitleData, json) as T;			case SearchInfoEntity:
-			return searchInfoEntityFromJson(data as SearchInfoEntity, json) as T;			case SearchInfoData:
-			return searchInfoDataFromJson(data as SearchInfoData, json) as T;			case SearchInfoDataData:
-			return searchInfoDataDataFromJson(data as SearchInfoDataData, json) as T;			case HomeArticleEntityEntity:
-			return homeArticleEntityEntityFromJson(data as HomeArticleEntityEntity, json) as T;			case HomeArticleEntityData:
-			return homeArticleEntityDataFromJson(data as HomeArticleEntityData, json) as T;			case HomeArticleEntityDataData:
-			return homeArticleEntityDataDataFromJson(data as HomeArticleEntityDataData, json) as T;			case HotKeyEntity:
-			return hotKeyEntityFromJson(data as HotKeyEntity, json) as T;			case HotKeyEntityData:
-			return hotKeyEntityDataFromJson(data as HotKeyEntityData, json) as T;    }
+    switch (type) {
+      case SystemListEntity:
+        return systemListEntityFromJson(data as SystemListEntity, json) as T;
+      case SystemListData:
+        return systemListDataFromJson(data as SystemListData, json) as T;
+      case SystemListDataData:
+        return systemListDataDataFromJson(data as SystemListDataData, json)
+            as T;
+      case BaseModelEntity:
+        return baseModelEntityFromJson(data as BaseModelEntity, json) as T;
+      case BannerEntityEntity:
+        return bannerEntityEntityFromJson(data as BannerEntityEntity, json)
+            as T;
+      case BannerEntityData:
+        return bannerEntityDataFromJson(data as BannerEntityData, json) as T;
+      case WebGuideEntity:
+        return webGuideEntityFromJson(data as WebGuideEntity, json) as T;
+      case WebGuideData:
+        return webGuideDataFromJson(data as WebGuideData, json) as T;
+      case WebGuideDataArticle:
+        return webGuideDataArticleFromJson(data as WebGuideDataArticle, json)
+            as T;
+      case SystemDataEntity:
+        return systemDataEntityFromJson(data as SystemDataEntity, json) as T;
+      case SystemDataData:
+        return systemDataDataFromJson(data as SystemDataData, json) as T;
+      case SystemDataDatachild:
+        return systemDataDatachildFromJson(data as SystemDataDatachild, json)
+            as T;
+      case LoginInfoEntityEntity:
+        return loginInfoEntityEntityFromJson(
+            data as LoginInfoEntityEntity, json) as T;
+      case LoginInfoEntityData:
+        return loginInfoEntityDataFromJson(data as LoginInfoEntityData, json)
+            as T;
+      case ProjectTopTitleEntity:
+        return projectTopTitleEntityFromJson(
+            data as ProjectTopTitleEntity, json) as T;
+      case ProjectTopTitleData:
+        return projectTopTitleDataFromJson(data as ProjectTopTitleData, json)
+            as T;
+      case TopArticleEntity:
+        return topArticleEntityFromJson(data as TopArticleEntity, json) as T;
+      case SearchInfoEntity:
+        return searchInfoEntityFromJson(data as SearchInfoEntity, json) as T;
+      case SearchInfoData:
+        return searchInfoDataFromJson(data as SearchInfoData, json) as T;
+      case SearchInfoDataData:
+        return searchInfoDataDataFromJson(data as SearchInfoDataData, json)
+            as T;
+      case HomeArticleEntityEntity:
+        return homeArticleEntityEntityFromJson(
+            data as HomeArticleEntityEntity, json) as T;
+      case HomeArticleEntityData:
+        return homeArticleEntityDataFromJson(
+            data as HomeArticleEntityData, json) as T;
+      case HomeArticleEntityDataData:
+        return homeArticleEntityDataDataFromJson(
+            data as HomeArticleEntityDataData, json) as T;
+      case HotKeyEntity:
+        return hotKeyEntityFromJson(data as HotKeyEntity, json) as T;
+      case HotKeyEntityData:
+        return hotKeyEntityDataFromJson(data as HotKeyEntityData, json) as T;
+    }
     return data as T;
   }
 
   static _getToJson<T>(Type type, data) {
-		switch (type) {			case SystemListEntity:
-			return systemListEntityToJson(data as SystemListEntity);			case SystemListData:
-			return systemListDataToJson(data as SystemListData);			case SystemListDataData:
-			return systemListDataDataToJson(data as SystemListDataData);			case BaseModelEntity:
-			return baseModelEntityToJson(data as BaseModelEntity);			case BannerEntityEntity:
-			return bannerEntityEntityToJson(data as BannerEntityEntity);			case BannerEntityData:
-			return bannerEntityDataToJson(data as BannerEntityData);			case WebGuideEntity:
-			return webGuideEntityToJson(data as WebGuideEntity);			case WebGuideData:
-			return webGuideDataToJson(data as WebGuideData);			case WebGuideDataArticle:
-			return webGuideDataArticleToJson(data as WebGuideDataArticle);			case SystemDataEntity:
-			return systemDataEntityToJson(data as SystemDataEntity);			case SystemDataData:
-			return systemDataDataToJson(data as SystemDataData);			case SystemDataDatachild:
-			return systemDataDatachildToJson(data as SystemDataDatachild);			case LoginInfoEntityEntity:
-			return loginInfoEntityEntityToJson(data as LoginInfoEntityEntity);			case LoginInfoEntityData:
-			return loginInfoEntityDataToJson(data as LoginInfoEntityData);			case ProjectTopTitleEntity:
-			return projectTopTitleEntityToJson(data as ProjectTopTitleEntity);			case ProjectTopTitleData:
-			return projectTopTitleDataToJson(data as ProjectTopTitleData);			case SearchInfoEntity:
-			return searchInfoEntityToJson(data as SearchInfoEntity);			case SearchInfoData:
-			return searchInfoDataToJson(data as SearchInfoData);			case SearchInfoDataData:
-			return searchInfoDataDataToJson(data as SearchInfoDataData);			case HomeArticleEntityEntity:
-			return homeArticleEntityEntityToJson(data as HomeArticleEntityEntity);			case HomeArticleEntityData:
-			return homeArticleEntityDataToJson(data as HomeArticleEntityData);			case HomeArticleEntityDataData:
-			return homeArticleEntityDataDataToJson(data as HomeArticleEntityDataData);			case HotKeyEntity:
-			return hotKeyEntityToJson(data as HotKeyEntity);			case HotKeyEntityData:
-			return hotKeyEntityDataToJson(data as HotKeyEntityData);    }
+    switch (type) {
+      case SystemListEntity:
+        return systemListEntityToJson(data as SystemListEntity);
+      case SystemListData:
+        return systemListDataToJson(data as SystemListData);
+      case SystemListDataData:
+        return systemListDataDataToJson(data as SystemListDataData);
+      case BaseModelEntity:
+        return baseModelEntityToJson(data as BaseModelEntity);
+      case BannerEntityEntity:
+        return bannerEntityEntityToJson(data as BannerEntityEntity);
+      case BannerEntityData:
+        return bannerEntityDataToJson(data as BannerEntityData);
+      case WebGuideEntity:
+        return webGuideEntityToJson(data as WebGuideEntity);
+      case WebGuideData:
+        return webGuideDataToJson(data as WebGuideData);
+      case WebGuideDataArticle:
+        return webGuideDataArticleToJson(data as WebGuideDataArticle);
+      case SystemDataEntity:
+        return systemDataEntityToJson(data as SystemDataEntity);
+      case SystemDataData:
+        return systemDataDataToJson(data as SystemDataData);
+      case SystemDataDatachild:
+        return systemDataDatachildToJson(data as SystemDataDatachild);
+      case LoginInfoEntityEntity:
+        return loginInfoEntityEntityToJson(data as LoginInfoEntityEntity);
+      case LoginInfoEntityData:
+        return loginInfoEntityDataToJson(data as LoginInfoEntityData);
+      case ProjectTopTitleEntity:
+        return projectTopTitleEntityToJson(data as ProjectTopTitleEntity);
+      case ProjectTopTitleData:
+        return projectTopTitleDataToJson(data as ProjectTopTitleData);
+      case TopArticleEntity:
+        return topArticleEntityToJson(data as TopArticleEntity);
+      case SearchInfoEntity:
+        return searchInfoEntityToJson(data as SearchInfoEntity);
+      case SearchInfoData:
+        return searchInfoDataToJson(data as SearchInfoData);
+      case SearchInfoDataData:
+        return searchInfoDataDataToJson(data as SearchInfoDataData);
+      case HomeArticleEntityEntity:
+        return homeArticleEntityEntityToJson(data as HomeArticleEntityEntity);
+      case HomeArticleEntityData:
+        return homeArticleEntityDataToJson(data as HomeArticleEntityData);
+      case HomeArticleEntityDataData:
+        return homeArticleEntityDataDataToJson(
+            data as HomeArticleEntityDataData);
+      case HotKeyEntity:
+        return hotKeyEntityToJson(data as HotKeyEntity);
+      case HotKeyEntityData:
+        return hotKeyEntityDataToJson(data as HotKeyEntityData);
+    }
     return data as T;
   }
+
   //Go back to a single instance by type
   static _fromJsonSingle(String type, json) {
-    switch (type) {			case 'SystemListEntity':
-			return SystemListEntity().fromJson(json);			case 'SystemListData':
-			return SystemListData().fromJson(json);			case 'SystemListDataData':
-			return SystemListDataData().fromJson(json);			case 'BaseModelEntity':
-			return BaseModelEntity().fromJson(json);			case 'BannerEntityEntity':
-			return BannerEntityEntity().fromJson(json);			case 'BannerEntityData':
-			return BannerEntityData().fromJson(json);			case 'WebGuideEntity':
-			return WebGuideEntity().fromJson(json);			case 'WebGuideData':
-			return WebGuideData().fromJson(json);			case 'WebGuideDataArticle':
-			return WebGuideDataArticle().fromJson(json);			case 'SystemDataEntity':
-			return SystemDataEntity().fromJson(json);			case 'SystemDataData':
-			return SystemDataData().fromJson(json);			case 'SystemDataDatachild':
-			return SystemDataDatachild().fromJson(json);			case 'LoginInfoEntityEntity':
-			return LoginInfoEntityEntity().fromJson(json);			case 'LoginInfoEntityData':
-			return LoginInfoEntityData().fromJson(json);			case 'ProjectTopTitleEntity':
-			return ProjectTopTitleEntity().fromJson(json);			case 'ProjectTopTitleData':
-			return ProjectTopTitleData().fromJson(json);			case 'SearchInfoEntity':
-			return SearchInfoEntity().fromJson(json);			case 'SearchInfoData':
-			return SearchInfoData().fromJson(json);			case 'SearchInfoDataData':
-			return SearchInfoDataData().fromJson(json);			case 'HomeArticleEntityEntity':
-			return HomeArticleEntityEntity().fromJson(json);			case 'HomeArticleEntityData':
-			return HomeArticleEntityData().fromJson(json);			case 'HomeArticleEntityDataData':
-			return HomeArticleEntityDataData().fromJson(json);			case 'HotKeyEntity':
-			return HotKeyEntity().fromJson(json);			case 'HotKeyEntityData':
-			return HotKeyEntityData().fromJson(json);    }
+    switch (type) {
+      case 'SystemListEntity':
+        return SystemListEntity().fromJson(json);
+      case 'SystemListData':
+        return SystemListData().fromJson(json);
+      case 'SystemListDataData':
+        return SystemListDataData().fromJson(json);
+      case 'BaseModelEntity':
+        return BaseModelEntity().fromJson(json);
+      case 'BannerEntityEntity':
+        return BannerEntityEntity().fromJson(json);
+      case 'BannerEntityData':
+        return BannerEntityData().fromJson(json);
+      case 'WebGuideEntity':
+        return WebGuideEntity().fromJson(json);
+      case 'WebGuideData':
+        return WebGuideData().fromJson(json);
+      case 'WebGuideDataArticle':
+        return WebGuideDataArticle().fromJson(json);
+      case 'SystemDataEntity':
+        return SystemDataEntity().fromJson(json);
+      case 'SystemDataData':
+        return SystemDataData().fromJson(json);
+      case 'SystemDataDatachild':
+        return SystemDataDatachild().fromJson(json);
+      case 'LoginInfoEntityEntity':
+        return LoginInfoEntityEntity().fromJson(json);
+      case 'LoginInfoEntityData':
+        return LoginInfoEntityData().fromJson(json);
+      case 'ProjectTopTitleEntity':
+        return ProjectTopTitleEntity().fromJson(json);
+      case 'ProjectTopTitleData':
+        return ProjectTopTitleData().fromJson(json);
+      case 'TopArticleEntity':
+        return TopArticleEntity().fromJson(json);
+      case 'SearchInfoEntity':
+        return SearchInfoEntity().fromJson(json);
+      case 'SearchInfoData':
+        return SearchInfoData().fromJson(json);
+      case 'SearchInfoDataData':
+        return SearchInfoDataData().fromJson(json);
+      case 'HomeArticleEntityEntity':
+        return HomeArticleEntityEntity().fromJson(json);
+      case 'HomeArticleEntityData':
+        return HomeArticleEntityData().fromJson(json);
+      case 'HomeArticleEntityDataData':
+        return HomeArticleEntityDataData().fromJson(json);
+      case 'HotKeyEntity':
+        return HotKeyEntity().fromJson(json);
+      case 'HotKeyEntityData':
+        return HotKeyEntityData().fromJson(json);
+    }
     return null;
   }
 
   //empty list is returned by type
   static _getListFromType(String type) {
-    switch (type) {			case 'SystemListEntity':
-			return List<SystemListEntity>();			case 'SystemListData':
-			return List<SystemListData>();			case 'SystemListDataData':
-			return List<SystemListDataData>();			case 'BaseModelEntity':
-			return List<BaseModelEntity>();			case 'BannerEntityEntity':
-			return List<BannerEntityEntity>();			case 'BannerEntityData':
-			return List<BannerEntityData>();			case 'WebGuideEntity':
-			return List<WebGuideEntity>();			case 'WebGuideData':
-			return List<WebGuideData>();			case 'WebGuideDataArticle':
-			return List<WebGuideDataArticle>();			case 'SystemDataEntity':
-			return List<SystemDataEntity>();			case 'SystemDataData':
-			return List<SystemDataData>();			case 'SystemDataDatachild':
-			return List<SystemDataDatachild>();			case 'LoginInfoEntityEntity':
-			return List<LoginInfoEntityEntity>();			case 'LoginInfoEntityData':
-			return List<LoginInfoEntityData>();			case 'ProjectTopTitleEntity':
-			return List<ProjectTopTitleEntity>();			case 'ProjectTopTitleData':
-			return List<ProjectTopTitleData>();			case 'SearchInfoEntity':
-			return List<SearchInfoEntity>();			case 'SearchInfoData':
-			return List<SearchInfoData>();			case 'SearchInfoDataData':
-			return List<SearchInfoDataData>();			case 'HomeArticleEntityEntity':
-			return List<HomeArticleEntityEntity>();			case 'HomeArticleEntityData':
-			return List<HomeArticleEntityData>();			case 'HomeArticleEntityDataData':
-			return List<HomeArticleEntityDataData>();			case 'HotKeyEntity':
-			return List<HotKeyEntity>();			case 'HotKeyEntityData':
-			return List<HotKeyEntityData>();    }
+    switch (type) {
+      case 'SystemListEntity':
+        return List<SystemListEntity>();
+      case 'SystemListData':
+        return List<SystemListData>();
+      case 'SystemListDataData':
+        return List<SystemListDataData>();
+      case 'BaseModelEntity':
+        return List<BaseModelEntity>();
+      case 'BannerEntityEntity':
+        return List<BannerEntityEntity>();
+      case 'BannerEntityData':
+        return List<BannerEntityData>();
+      case 'WebGuideEntity':
+        return List<WebGuideEntity>();
+      case 'WebGuideData':
+        return List<WebGuideData>();
+      case 'WebGuideDataArticle':
+        return List<WebGuideDataArticle>();
+      case 'SystemDataEntity':
+        return List<SystemDataEntity>();
+      case 'SystemDataData':
+        return List<SystemDataData>();
+      case 'SystemDataDatachild':
+        return List<SystemDataDatachild>();
+      case 'LoginInfoEntityEntity':
+        return List<LoginInfoEntityEntity>();
+      case 'LoginInfoEntityData':
+        return List<LoginInfoEntityData>();
+      case 'ProjectTopTitleEntity':
+        return List<ProjectTopTitleEntity>();
+      case 'ProjectTopTitleData':
+        return List<ProjectTopTitleData>();
+      case 'TopArticleEntity':
+        return List<TopArticleEntity>();
+      case 'SearchInfoEntity':
+        return List<SearchInfoEntity>();
+      case 'SearchInfoData':
+        return List<SearchInfoData>();
+      case 'SearchInfoDataData':
+        return List<SearchInfoDataData>();
+      case 'HomeArticleEntityEntity':
+        return List<HomeArticleEntityEntity>();
+      case 'HomeArticleEntityData':
+        return List<HomeArticleEntityData>();
+      case 'HomeArticleEntityDataData':
+        return List<HomeArticleEntityDataData>();
+      case 'HotKeyEntity':
+        return List<HotKeyEntity>();
+      case 'HotKeyEntityData':
+        return List<HotKeyEntityData>();
+    }
     return null;
   }
 

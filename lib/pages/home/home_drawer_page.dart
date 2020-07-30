@@ -76,7 +76,7 @@ class _HomeDrawerPageState extends State<HomeDrawerPage> {
             decoration: BoxDecoration(color: Colors.white),
             accountName: Text(
               userName,
-              style: TextStyle(color: Colors.yellowAccent),
+              style: TextStyle(color: Colors.green),
             ),
             currentAccountPicture: CircleAvatar(
               child: Icon(Icons.person),
@@ -84,7 +84,7 @@ class _HomeDrawerPageState extends State<HomeDrawerPage> {
             otherAccountsPictures: <Widget>[
               userName.length == 0
                   ? Container(
-                      padding: EdgeInsets.all(5),
+
                       child: InkWell(
                         onTap: () {
                           Navigator.pop(context);
@@ -119,6 +119,14 @@ class _HomeDrawerPageState extends State<HomeDrawerPage> {
             onTap: () {
               NavigatorUtils.goBack(context);
               NavigatorUtils.push(context, Routes.changeTheme);
+            },
+          ),
+          ListTile(
+            title: Text('关于作者'),
+            leading: Icon(Icons.android,color:Colors.green),
+            onTap: (){
+              NavigatorUtils.goBack(context);
+              NavigatorUtils.push(context, Routes.aboutPage);
             },
           ),
           userName.length != 0

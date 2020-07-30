@@ -32,21 +32,6 @@ class _CollectionPageState extends State<CollectionPage> {
           elevation: 0,
         ),
         body: _getList(context)
-      /*Container(
-        child: lists.length > 0
-            ? SmartRefresher(
-                controller: _controller,
-                onRefresh: _onRefresh,
-                onLoading: _onLoadMore,
-                enablePullUp: true,
-                child: ListView.builder(
-                    itemCount: lists.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return CollectionItem(info: lists[index]);
-                    }),
-              )
-            : CommonLoading(),
-      ),*/
     );
   }
 
@@ -110,10 +95,13 @@ class _CollectionPageState extends State<CollectionPage> {
               });
             }
           } else if (info.errorCode == 666) {
-            setState(() {
-              _listLoadState = LoadState.State_Empty;
-            });
+            if(_page == 0){
+              setState(() {
+                _listLoadState = LoadState.State_Empty;
+              });
+            }
           } else {
+            ToastHelper.showWarning(info.errorMsg);
             setState(() {
               _listLoadState = LoadState.State_Error;
             });

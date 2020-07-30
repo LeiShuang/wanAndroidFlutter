@@ -91,7 +91,7 @@ class DioHelper {
       //Debug模式打印日志
       if (GlobalConfig.isDebug) {
         print('请求异常:' + error.toString());
-        print('请求异常url: ' + url);
+        print('请求异常url: ' + _dio.options.baseUrl + url);
         print('请求头: ' + _dio.options.headers.toString());
         print('method: ' + _dio.options.method);
       }
@@ -101,7 +101,7 @@ class DioHelper {
 
     // debug模式打印相关数据
     if (GlobalConfig.isDebug) {
-      print('请求url: ' + url);
+      print('请求url: ' + _dio.options.baseUrl + url);
       print('请求头: ' + _dio.options.headers.toString());
 
       if (params != null) {
@@ -119,7 +119,7 @@ class DioHelper {
   }
 }
 
-_error(Function errorCallBack, String error) {
+  _error(Function errorCallBack, String error) {
   if (errorCallBack != null) {
     errorCallBack(error);
   }

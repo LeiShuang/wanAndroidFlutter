@@ -7,6 +7,7 @@ import 'package:wanandroid/helper/toast_helper.dart';
 import 'package:wanandroid/pages/home/project_list_page.dart';
 import 'package:wanandroid/utils/theme_utils.dart';
 import 'package:wanandroid/widgets/common_loading.dart';
+import 'package:wanandroid/widgets/loading_state.dart';
 
 class ProjectPage extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class _ProjectPageState extends State<ProjectPage>
     with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   List<ProjectTopTitleData> _tabItems = [];
   TabController _tabController;
-
+  LoadState _loadState = LoadState.State_Loading;
   @override
   void initState() {
     super.initState();
@@ -34,7 +35,8 @@ class _ProjectPageState extends State<ProjectPage>
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: _tabItems.length > 0
+      body: _getTab(),
+      /* _tabItems.length > 0
           ? Column(
               children: <Widget>[
                 Container(
@@ -64,10 +66,48 @@ class _ProjectPageState extends State<ProjectPage>
                 ))
               ],
             )
-          : _showLoadingView(),
+          : _showLoadingView(),*/
     );
   }
-
+  Widget _getTab(){
+    return LoadStateLayout(loadState: _loadState, errRetry: (){
+      setState(() {
+        _loadState = LoadState.State_Error;
+      });
+    }, emptyRetry: (){
+      setState(() {
+        _loadState = LoadState.State_Empty;
+      });
+    }, successWidget: Column(
+      children: [
+        Container(
+          child: TabBar(
+              isScrollable: true,
+              controller: _tabController,
+              labelPadding: EdgeInsets.all(5),
+              labelColor: ThemeUtils.defaultColor,
+              indicatorColor: ThemeUtils.defaultColor,
+              indicatorPadding: EdgeInsets.all(5),
+              tabs: _tabItems.map((titleData) {
+                return Text(
+                  titleData.name,
+                  style: TextStyle(
+                      color: ThemeUtils.defaultColor, fontSize: 16.0),
+                );
+              }).toList()),
+        ),
+        Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: _tabItems.map((items) {
+                return ProjectListPage(
+                  id: items.id,
+                );
+              }).toList(),
+            ))
+      ],
+    ));
+  }
   @override
   bool get wantKeepAlive => true;
 
@@ -76,10 +116,19 @@ class _ProjectPageState extends State<ProjectPage>
       setState(() {
         _tabItems = ProjectTopTitleEntity().fromJson(projectTopTitle).data;
         _tabController =
-            new TabController(length: _tabItems.length, vsync: this);
+        new TabController(length: _tabItems.length, vsync: this);
+        if(_tabItems.length == 0){
+         _loadState =  LoadState.State_Empty;
+        }else{
+          _loadState =  LoadState.State_Success;
+        }
+
       });
     }, (errMsg) {
-      ToastHelper.showToast(errMsg.toString());
+      setState(() {
+        _loadState =  LoadState.State_Error;
+        ToastHelper.showToast(errMsg.toString());
+      });
     });
   }
   @override
@@ -89,9 +138,3 @@ class _ProjectPageState extends State<ProjectPage>
   }
 }
 
-Widget _showLoadingView() {
-  return Container(
-    height: ScreenUtil().setHeight(1400),
-    child: CommonLoading(),
-  );
-}

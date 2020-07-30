@@ -22,6 +22,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final userNameController = TextEditingController(text: '');
   final passWordController = TextEditingController(text: '');
   final rePassWordController = TextEditingController(text: '');
+  bool obpassWord = true;
+  bool obUserName = false;
 
   //是否正在注册
   bool isRegistering = false;
@@ -60,9 +62,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 height: 100,
               ),
             ),
-            createInputBox(userNameController, Icons.person, false),
-            createInputBox(passWordController, Icons.lock_outline, true),
-            createInputBox(rePassWordController, Icons.lock_outline, true),
+            createInputBox(
+                userNameController, Icons.person, Icons.close, false),
+            createInputBox(passWordController, Icons.lock_outline,
+                Icons.visibility, true, ),
+            createInputBox(rePassWordController, Icons.lock_outline,
+                Icons.visibility, true, ),
             Padding(
               padding:
                   EdgeInsets.only(left: 30, top: 20, right: 30, bottom: 20),
@@ -84,9 +89,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                 .isEmpty) {
                           ToastHelper.showWarning("账号或者密码为空!");
                           return;
-                        }else if(passWordController.text.trim().toString() !=  rePassWordController.text
-                            .trim()
-                            .toString()){
+                        } else if (passWordController.text.trim().toString() !=
+                            rePassWordController.text.trim().toString()) {
                           ToastHelper.showWarning("两次输入密码不一致!");
                           return;
                         }
@@ -113,8 +117,8 @@ class _RegisterPageState extends State<RegisterPage> {
         ));
   }
 
-  createInputBox(
-      TextEditingController controller, IconData icon, bool isPassWord) {
+  createInputBox(TextEditingController controller, IconData leftIcon,
+      IconData rightIcon, bool isPassWord) {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20, top: 20),
       padding: EdgeInsets.only(left: 10),
@@ -125,7 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
         alignment: Alignment.centerRight,
         children: <Widget>[
           TextField(
-            obscureText: isPassWord ? true : false,
+            obscureText: isPassWord ? obpassWord : obUserName,
             style: TextStyle(
               fontSize: 16,
             ),
@@ -136,26 +140,32 @@ class _RegisterPageState extends State<RegisterPage> {
               contentPadding: EdgeInsets.fromLTRB(0, 5, 50, 5),
               border: InputBorder.none,
               icon: Icon(
-                icon,
+                leftIcon,
                 color: Colors.blue,
               ),
               labelText: !isPassWord ? '请输入用户名' : '请输入密码',
             ),
           ),
-          controller.text.length > 0
-              ? Container(
-                  margin: EdgeInsets.only(right: 20),
-                  child: InkWell(
-                    onTap: () {
-                      controller.clear();
-                    },
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.grey,
-                    ),
-                  ),
-                )
-              : Container(),
+          Container(
+            margin: EdgeInsets.only(right: 20),
+            child: InkWell(
+              onTap: () {
+                if (isPassWord) {
+                  setState(() {
+                    obpassWord = !obpassWord;
+                  });
+                } else {
+                  setState(() {
+                    controller.clear();
+                  });
+                }
+              },
+              child: Icon(
+                rightIcon,
+                color: Colors.grey,
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -194,11 +204,12 @@ class _RegisterPageState extends State<RegisterPage> {
       ToastHelper.showWarning(errorCallBack.toString());
     });
   }
+
   @override
   void dispose() {
-      userNameController.dispose();
-      passWordController.dispose();
-      rePassWordController.dispose();
+    userNameController.dispose();
+    passWordController.dispose();
+    rePassWordController.dispose();
     super.dispose();
   }
 }

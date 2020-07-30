@@ -9,6 +9,7 @@ import 'package:wanandroid/pages/search/home_search.dart';
 import 'package:wanandroid/pages/search/search_result_page.dart';
 import 'package:wanandroid/pages/web_detail/web_detail.dart';
 import 'package:wanandroid/routers/router_init.dart';
+import 'package:wanandroid/widgets/about_page.dart';
 import 'package:wanandroid/widgets/change_theme.dart';
 
 import '404.dart';
@@ -23,6 +24,7 @@ class Routes {
   static String searchResult = "/searchResult";
   static String myCollection = "/myCollection";
   static String changeTheme = "/changeTheme";
+  static String aboutPage = "/aboutPage";
   static final List<IRouterProvider> _listRouter = [];
 
   static void configureRoutes(Router router) {
@@ -75,6 +77,12 @@ class Routes {
             handlerFunc:
                 (BuildContext context, Map<String, List<String>> params) =>
                     CollectionPage()));
+
+    router.define(aboutPage,
+        handler: Handler(
+            handlerFunc:
+                (BuildContext context, Map<String, List<String>> params) =>
+                    AboutPage()));
     _listRouter.clear();
 
     /// 各自路由由各自模块管理，统一在此添加初始化

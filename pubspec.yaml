@@ -4,7 +4,7 @@ description: A new Flutter application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -25,6 +25,7 @@ dependencies:
   pull_to_refresh: ^1.5.8 #下拉刷新上拉加载更多
   shared_preferences: ^0.5.3+4 #Swebview_flutterharedPreferences
   event_bus: ^1.1.1 #通信组件
+  #flutter_html: ^1.0.0 #Html标签加载
   flutter_swiper: ^1.1.6 #swiper组件
   fluro: ^1.5.0 # 路由框架 https://github.com/theyakka/fluro
 #  dio_cookie_manager: ^0.0.1
@@ -58,8 +59,8 @@ flutter:
     - images/splash_bg6.jpg
     - images/theme_choice.png
     - images/data_empty.png
-    - images/icon_empty.png
-    - images/icon_err.png
+    - images/ic_empty.png
+    - images/ic_error.png
     - images/icon_loading.gif
   # To add assets to your application, add an assets section, like this:
   # assets:

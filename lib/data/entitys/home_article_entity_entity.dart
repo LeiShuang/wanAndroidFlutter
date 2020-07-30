@@ -37,6 +37,7 @@ class HomeArticleEntityDataData with JsonConvert<HomeArticleEntityDataData> {
 	String prefix;
 	String projectLink;
 	int publishTime;
+	int originId;
 	int realSuperChapterId;
 	int selfVisible;
 	int shareDate;

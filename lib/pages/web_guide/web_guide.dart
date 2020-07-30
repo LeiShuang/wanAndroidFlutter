@@ -5,20 +5,9 @@ import 'package:wanandroid/data/entitys/web_guide_entity.dart';
 import 'package:wanandroid/pages/my_system/net.dart';
 import 'package:wanandroid/routers/fluro_navigator.dart';
 import 'package:wanandroid/widgets/common_loading.dart';
+import 'package:wanandroid/widgets/loading_state.dart';
 
-//void main() => runApp(WebGuideApp());
-//
-//class WebGuideApp extends StatelessWidget {
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return MaterialApp(
-//      title: "网站导航",
-//      theme: ThemeData(primarySwatch: Colors.blue),
-//      home: WebGuidePage(),
-//    );
-//  }
-//}
+
 
 
 class WebGuidePage extends StatefulWidget {
@@ -33,6 +22,7 @@ class _WebGuidePageState extends State<WebGuidePage> with AutomaticKeepAliveClie
 
   List<WebGuideData>  _entityList = new List();
   List<WebGuideDataArticle> _articles = new List();
+  LoadState _loadState = LoadState.State_Loading;
   var _leftIndex = 0;
 
 
@@ -40,9 +30,20 @@ class _WebGuidePageState extends State<WebGuidePage> with AutomaticKeepAliveClie
   void initState() {
     super.initState();
     getWebGuideList().then((value) => {
+
       setState(() {
-        _entityList.addAll(value.data);
-        _articles.addAll(_entityList[_leftIndex].articles);
+        if(value.errorCode == 0){
+          if(value.data.length == 0){
+            _loadState = LoadState.State_Empty;
+          }else{
+            _loadState = LoadState.State_Success;
+            _entityList.addAll(value.data);
+            _articles.addAll(_entityList[_leftIndex].articles);
+          }
+        }else{
+          _loadState = LoadState.State_Error;
+        }
+
       })
     });
 
@@ -50,12 +51,45 @@ class _WebGuidePageState extends State<WebGuidePage> with AutomaticKeepAliveClie
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return _entityList.length > 0 ?Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text("网站导航"),
         centerTitle: true,
       ),
-      body: Row(
+      body: LoadStateLayout(loadState: _loadState, errRetry: (){
+        setState(() {
+          _loadState = LoadState.State_Error;
+        });
+      }, emptyRetry: (){
+        setState(() {
+          _loadState = LoadState.State_Empty;
+        });
+      }, successWidget: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 1,
+            child: ListView.builder(
+                itemCount: _entityList.length,
+                itemBuilder: (context,index){
+                  return _buildListItems(index);
+                }),
+          ),
+          Expanded(
+              flex: 2,
+              child:GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,////横轴两个子widget
+                      childAspectRatio: 1.0////子widget 宽高比为1
+                  ),
+                  itemCount: _articles.length,
+                  itemBuilder: (context,index){
+                    return _buildGridItems(index);
+                  })
+          )
+
+        ],
+      ))/*Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
@@ -80,8 +114,8 @@ class _WebGuidePageState extends State<WebGuidePage> with AutomaticKeepAliveClie
           )
 
         ],
-      ),
-    ) : CommonLoading();
+      ),*/
+    );
   }
 
   _buildListItems(int index) {

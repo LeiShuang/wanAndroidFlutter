@@ -8,6 +8,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wanandroid/data/api/requeststring.dart';
 import 'package:wanandroid/data/entitys/banner_entity_entity.dart';
 import 'package:wanandroid/data/entitys/home_article_entity_entity.dart';
+import 'package:wanandroid/data/entitys/top_article_entity.dart';
 import 'package:wanandroid/generated/json/base/json_convert_content.dart';
 import 'package:wanandroid/helper/dio_helper.dart';
 import 'package:wanandroid/helper/toast_helper.dart';
@@ -18,15 +19,20 @@ import 'package:wanandroid/routers/fluro_navigator.dart';
 import 'package:wanandroid/routers/routers.dart';
 import 'package:wanandroid/utils/string_utils.dart';
 import 'package:wanandroid/widgets/common_loading.dart';
+import 'package:wanandroid/widgets/loading_state.dart';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<HomePage>{
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin<HomePage> {
   List<BannerEntityData> bannerLists = List();
+  List<HomeArticleEntityDataData> topArticleLists = List();
   List<HomeArticleEntityDataData> articleLists = List();
+  List<HomeArticleEntityDataData> allLists = List();
+  LoadState _loadState = LoadState.State_Loading;
   RefreshController _homeRefreshController =
       RefreshController(initialRefresh: false);
   int _index = 0; //当前页面索引
@@ -40,14 +46,13 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
   Widget build(BuildContext context) {
     ScreenUtil.init(context,
         width: 1080, height: 1920, allowFontScaling: false);
-     return Scaffold(
-       drawer: HomeDrawerPage(),
+    return Scaffold(
+        drawer: HomeDrawerPage(),
         appBar: AppBar(
           title: Text(
             StringUtils.home,
             style: TextStyle(color: Colors.white),
           ),
-
           iconTheme: IconThemeData(color: Colors.white),
           elevation: 0,
           actions: <Widget>[
@@ -58,37 +63,50 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
                 })
           ],
         ),
-        body: Column(
-            children: bannerLists.length > 0 && articleLists.length > 0
-                ? _getContent()
-                : _showLoadingView()));
-    /*return Container(
-        child: Column(
-            children: bannerLists.length > 0 && articleLists.length > 0
-                ? _getContent()
-                : _showLoadingView()));*/
+        body: _getContent());
   }
 
   //获取控件
-  List<Widget> _getContent() {
-    return
+  Widget _getContent() {
+    /*  return
         //轮播图
-        <Widget>[HomeTopBanner(data: bannerLists), _getArticleWidget()];
-  }
-
-  List<Widget> _showLoadingView() {
-    return <Widget>[
-      Container(
-        height: ScreenUtil().setHeight(1400),
-        child: CommonLoading(),
-      )
-    ];
+        <Widget>[HomeTopBanner(data: bannerLists), _getArticleWidget()];*/
+    return LoadStateLayout(
+        loadState: _loadState,
+        errRetry: () {
+          setState(() {
+            _getHomeData();
+          });
+        },
+        emptyRetry: () {
+          setState(() {
+            _getHomeData();
+          });
+        },
+        successWidget: Column(
+          children: [HomeTopBanner(data: bannerLists), _getArticleWidget()],
+        ));
   }
 
   //获取首页数据
   void _getHomeData() {
     _getBannerData();
+    _getTopArticleData();
     _getArticleListData();
+  }
+
+  void _getTopArticleData() async {
+    DioHelper().get(RequestUrl.getHomeTopArticle, null, (data) {
+      List<HomeArticleEntityDataData> toparticles =
+          TopArticleEntity().fromJson(data).data;
+      setState(() {
+        topArticleLists.clear();
+        topArticleLists.addAll(toparticles);
+        print("topArticleLists的长度是${topArticleLists.length},数据是" +topArticleLists.toString());
+      });
+    }, (err) {
+      ToastHelper.showToast(err.toString());
+    });
   }
 
   void _getBannerData() async {
@@ -103,23 +121,33 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
     });
   }
 
-  void _getArticleListData() async{
+  void _getArticleListData() async {
     await DioHelper().get('article/list/$_index/json', null, (articleData) {
-      setState(() {
-        List<HomeArticleEntityDataData> articles =
-            HomeArticleEntityEntity().fromJson(articleData).data.datas;
-        if(mounted){
-          if(_index == 0 ){
+      List<HomeArticleEntityDataData> articles =HomeArticleEntityEntity().fromJson(articleData).data.datas;
+      if (mounted) {
+        setState(() {
+          if(_index == 0){
             articleLists.clear();
+            articleLists.addAll(topArticleLists);
+            print("topArticleLists的长度是${topArticleLists.length}");
             articleLists.addAll(articles);
+            if(articleLists.length == 0){
+              _loadState = LoadState.State_Empty;
+            }else{
+              _loadState = LoadState.State_Success;
+            }
           }else{
             articleLists.addAll(articles);
+            _loadState = LoadState.State_Success;
           }
-        }
+        });
         print("articleInfo:" + articles.toString());
-      });
+      }
     }, (error) {
-      ToastHelper.showToast("获取数据失败");
+      setState(() {
+        _loadState = LoadState.State_Error;
+        ToastHelper.showToast(error.toString());
+      });
     });
   }
 
@@ -129,6 +157,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
         child: SmartRefresher(
       controller: _homeRefreshController,
       child: ListView.builder(
+
           itemCount: articleLists.length,
           itemBuilder: (BuildContext context, int index) {
             return HomeArticleWidget(data: articleLists[index]);

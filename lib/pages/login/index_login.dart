@@ -25,11 +25,13 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _onPasswordController = TextEditingController();
   SharedPreferences prefs;
   bool isLogin = false;
-
+  bool obpassWord = true;
+  bool obUserName = false;
   @override
   void initState() {
     super.initState();
     initPreference();
+
   }
 
   @override
@@ -65,8 +67,8 @@ class _LoginPageState extends State<LoginPage> {
               height: 100,
             ),
           ),
-          createInputBox(_onPhoneController, Icons.person, false),
-          createInputBox(_onPasswordController, Icons.lock_outline, true),
+          createInputBox(_onPhoneController, Icons.person, Icons.close, false),
+          createInputBox(_onPasswordController, Icons.lock_outline,Icons.visibility,true),
           Padding(
             padding: EdgeInsets.only(left: 30, top: 20, right: 30, bottom: 20),
             child: Row(
@@ -134,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   createInputBox(
-      TextEditingController controller, IconData icon, bool isPassWord) {
+      TextEditingController controller, IconData leftIcon,IconData rightIcon, bool isPassWord) {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20, top: 20),
       padding: EdgeInsets.only(left: 10),
@@ -145,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
         alignment: Alignment.centerRight,
         children: <Widget>[
           TextField(
-            obscureText: isPassWord ? true : false,
+            obscureText: isPassWord ? obpassWord :obUserName,
             style: TextStyle(
               fontSize: 16,
             ),
@@ -156,26 +158,34 @@ class _LoginPageState extends State<LoginPage> {
               contentPadding: EdgeInsets.fromLTRB(0, 5, 50, 5),
               border: InputBorder.none,
               icon: Icon(
-                icon,
+                leftIcon,
                 color: Colors.blue,
               ),
               labelText: !isPassWord ? '请输入用户名' : '请输入密码',
             ),
           ),
-          controller.text.length > 0
-              ? Container(
+           Container(
                   margin: EdgeInsets.only(right: 20),
                   child: InkWell(
                     onTap: () {
-                      controller.clear();
+                      if(isPassWord){
+                        setState(() {
+                          obpassWord = !obpassWord;
+                        });
+
+                      }else{
+                        setState(() {
+                          controller.clear();
+                        });
+
+                      }
                     },
                     child: Icon(
-                      Icons.close,
+                      rightIcon,
                       color: Colors.grey,
                     ),
                   ),
-                )
-              : Container(),
+                ),
         ],
       ),
     );

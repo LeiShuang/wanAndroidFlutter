@@ -7,6 +7,7 @@ import 'package:wanandroid/helper/toast_helper.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:wanandroid/pages/home/project_list_item.dart';
 import 'package:wanandroid/widgets/common_loading.dart';
+import 'package:wanandroid/widgets/loading_state.dart';
 
 class ProjectListPage extends StatefulWidget {
   final int id;
@@ -26,7 +27,9 @@ class ProjectListPage extends StatefulWidget {
 class _ProjectListPage extends State<ProjectListPage>
     with AutomaticKeepAliveClientMixin {
   var _currentPage = 1;
+  LoadState _loadState = LoadState.State_Loading;
   List<HomeArticleEntityDataData> articlesList = [];
+  List<HomeArticleEntityDataData> datas = [];
   RefreshController _scrollController;
 
   @override
@@ -39,42 +42,65 @@ class _ProjectListPage extends State<ProjectListPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return
-      articlesList.length > 0
-        ? SmartRefresher(
-            controller:
-            _scrollController,
-            enablePullUp: true,
-            onRefresh: _onRresh,
-            onLoading: _onLoadingMore,
-            child: new StaggeredGridView.countBuilder(
-              itemCount: articlesList.length,
-              crossAxisCount: 4,
-              itemBuilder: (BuildContext context, int index) => new Container(
-                child: ProjectListItem(
-                  index: index,
-                  data: articlesList[index],
-                ),
-              ),
-              staggeredTileBuilder: (int index) => new StaggeredTile.fit(2),
-            ))
-        : CommonLoading();
+    return _getListWidget();
   }
 
+  Widget _getListWidget(){
+    return LoadStateLayout(loadState: _loadState, errRetry: (){
+        setState(() {
+          _loadState = LoadState.State_Error;
+        });
+    }, emptyRetry: (){
+        setState(() {
+          _loadState = LoadState.State_Empty;
+        });
+    }, successWidget: SmartRefresher(
+        controller:
+        _scrollController,
+        enablePullUp: true,
+        onRefresh: _onRresh,
+        onLoading: _onLoadingMore,
+        child: new StaggeredGridView.countBuilder(
+          itemCount: articlesList.length,
+          crossAxisCount: 4,
+          itemBuilder: (BuildContext context, int index) => new Container(
+            child: ProjectListItem(
+              index: index,
+              data: articlesList[index],
+            ),
+          ),
+          staggeredTileBuilder: (int index) => new StaggeredTile.fit(2),
+        )));
+  }
   void _loadListData() async {
     await DioHelper().get(
         "project/list/$_currentPage/json?cid=${widget.id.toString()}", null,
+
         (listData) {
-      setState(() {
-        if (_currentPage == 1) {
-          articlesList.clear();
-          articlesList.addAll(HomeArticleEntityEntity().fromJson(listData).data.datas);
-        } else {
-          articlesList.addAll(HomeArticleEntityEntity().fromJson(listData).data.datas);
-        }
-      });
+          datas =  HomeArticleEntityEntity().fromJson(listData).data.datas;
+          if(mounted){
+            setState(() {
+              if(datas.length == 0 && _currentPage == 0){
+                _loadState = LoadState.State_Empty;
+              }else{
+                _loadState = LoadState.State_Success;
+                if (_currentPage == 1) {
+                  articlesList.clear();
+                  articlesList.addAll(datas);
+                } else {
+                  articlesList.addAll(datas);
+                }
+              }
+
+            });
+          }
+
     }, (errMsg) {
-      ToastHelper.showToast(errMsg.toString());
+          setState(() {
+            _loadState = LoadState.State_Error;
+            ToastHelper.showToast(errMsg.toString());
+
+          });
     });
   }
 

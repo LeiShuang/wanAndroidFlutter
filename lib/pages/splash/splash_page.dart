@@ -20,7 +20,7 @@ class _SplashPageState extends State<SplashPage> {
       decoration: BoxDecoration(
         color: Colors.white,
           image: DecorationImage(
-              image: AssetImage("images/splash_bg4.jpg"), fit: BoxFit.fill)),
+              image: AssetImage("images/splash_bg6.jpg"), fit: BoxFit.fill)),
     );
   }
 
