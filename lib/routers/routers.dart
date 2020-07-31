@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wanandroid/pages/collection_page.dart';
 import 'package:wanandroid/pages/login/index_login.dart';
 import 'package:wanandroid/pages/login/index_register.dart';
-import 'package:wanandroid/pages/main.dart';
+import 'file:///E:/StudioProjects/wanAndroidFlutter/lib/main.dart';
 import 'package:wanandroid/pages/my_system/system_router.dart';
 import 'package:wanandroid/pages/search/home_search.dart';
 import 'package:wanandroid/pages/search/search_result_page.dart';

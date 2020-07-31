@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wanandroid/helper/toast_helper.dart';
 import 'package:wanandroid/pages/home/idnex_project.dart';
 import 'package:wanandroid/pages/home/index_home.dart';
 import 'package:wanandroid/pages/my_system/knowledge_system.dart';
 import 'package:wanandroid/pages/web_guide/web_guide.dart';
+import 'package:wanandroid/routers/fluro_navigator.dart';
+import 'package:wanandroid/utils/back_desktop.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -50,10 +53,6 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        /*appBar: AppBar(
-          title: Text(_appBarTitles[currentIndex]),
-        ),*/
-//      backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentIndex,
           //一般都设置fixed
