@@ -44,7 +44,13 @@ class _WebDetailPageState extends State<WebDetailPage> {
                       _controller.complete(controller);
                     },
                     navigationDelegate: (NavigationRequest request) {
+
                       var url = request.url;
+                      if (url.startsWith('bilibili') || url.startsWith('https://www.jianshu.com')
+                      ||url.startsWith('https://www.csdn.net')) {
+                        print('blocking navigation to $request}');
+                        return NavigationDecision.prevent;
+                      }
                       print("visit$url");
                       setState(() {
                         isLoading = true;

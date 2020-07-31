@@ -5,6 +5,8 @@ import 'package:wanandroid/data/entitys/home_article_entity_entity.dart';
 import 'package:wanandroid/helper/dio_helper.dart';
 import 'package:wanandroid/helper/toast_helper.dart';
 import 'package:wanandroid/pages/home/home_article.dart';
+import 'package:wanandroid/routers/fluro_navigator.dart';
+import 'package:wanandroid/routers/routers.dart';
 import 'package:wanandroid/widgets/collection_item.dart';
 import 'package:wanandroid/widgets/common_loading.dart';
 import 'package:wanandroid/widgets/loading_state.dart';
@@ -100,7 +102,10 @@ class _CollectionPageState extends State<CollectionPage> {
                 _listLoadState = LoadState.State_Empty;
               });
             }
-          } else {
+          } else if(info.errorCode == ResultCode.RELOGIN){
+            ToastHelper.showWarning(info.errorMsg);
+            NavigatorUtils.push(context, Routes.loginPage);
+          }else{
             ToastHelper.showWarning(info.errorMsg);
             setState(() {
               _listLoadState = LoadState.State_Error;

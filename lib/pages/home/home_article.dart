@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wanandroid/config/dio_err_code.dart';
 import 'package:wanandroid/data/entitys/home_article_entity_entity.dart';
 import 'package:wanandroid/helper/dio_helper.dart';
 import 'package:wanandroid/helper/toast_helper.dart';
 import 'package:wanandroid/routers/fluro_navigator.dart';
+import 'package:wanandroid/routers/routers.dart';
 
 //首页ListView的Item布局
 class HomeArticleWidget extends StatefulWidget {
@@ -128,9 +130,14 @@ class  _HomeArticleWidgetState extends State<HomeArticleWidget>{
   void addCollect(BuildContext context, HomeArticleEntityDataData data) async {
     await DioHelper().post("lg/collect/${data.id}/json", null,
             (successCallBack) {
-          this.setState(() {
-            widget._data.collect = true;
-          });
+      if(successCallBack['errorCode'] == ResultCode.RELOGIN){
+        ToastHelper.showWarning("请先登录!");
+        NavigatorUtils.push(context, Routes.loginPage);
+      }else{
+        this.setState(() {
+          widget._data.collect = true;
+        });
+      }
         }, (errorCallBack) {
           ToastHelper.showToast(errorCallBack);
         });
