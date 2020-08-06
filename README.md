@@ -1,2 +1,3 @@
 # wanAndroidFlutter
-一款由Flutter写的玩安卓APP(自我学习项目)
+一款由Flutter写的玩安卓APP
+项目中所有接口都来自于 玩安卓 平台，项目使用到的三方 packages包都是比较常用的库，例如Dio，event_bus，flutter_screenutil,fluro,webview_flutter等
